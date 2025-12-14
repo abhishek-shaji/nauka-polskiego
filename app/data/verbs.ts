@@ -1,6 +1,3 @@
-// Comprehensive Polish verb conjugation database
-// Present tense conjugations
-
 export interface VerbConjugation {
   infinitive: string;
   meaning: string;
@@ -329,7 +326,8 @@ export const verbs: VerbConjugation[] = [
     },
     group: "-ać (am, asz)",
   },
-  // -eć verbs (Group II - ę, isz/ysz)
+
+  // -eć verbs (Group II - ę, esz)
   {
     infinitive: "rozumieć",
     meaning: "to understand",
@@ -382,6 +380,7 @@ export const verbs: VerbConjugation[] = [
     },
     group: "irregular",
   },
+
   // -ić/-yć verbs (Group III - ę, isz/ysz)
   {
     infinitive: "mówić",
@@ -578,6 +577,7 @@ export const verbs: VerbConjugation[] = [
     },
     group: "-yć (ę, ysz)",
   },
+
   // Irregular and special verbs
   {
     infinitive: "być",
@@ -1163,6 +1163,76 @@ export const verbs: VerbConjugation[] = [
       oniOne: "czeszą się",
     },
     group: "-ać (ę, esz)",
+  },
+
+  // ---------------------------------------------------------
+  // NEW VERBS (missing ones you requested)
+  // ---------------------------------------------------------
+
+  {
+    infinitive: "kontrolować",
+    meaning: "to control",
+    conjugations: {
+      ja: "kontroluję",
+      ty: "kontrolujesz",
+      onOnaOno: "kontroluje",
+      my: "kontrolujemy",
+      wy: "kontrolujecie",
+      oniOne: "kontrolują",
+    },
+    group: "-ować (uję, ujesz)",
+  },
+  {
+    infinitive: "koniugować",
+    meaning: "to conjugate",
+    conjugations: {
+      ja: "koniuguję",
+      ty: "koniugujesz",
+      onOnaOno: "koniuguje",
+      my: "koniugujemy",
+      wy: "koniugujecie",
+      oniOne: "koniugują",
+    },
+    group: "-ować (uję, ujesz)",
+  },
+  {
+    infinitive: "surfować",
+    meaning: "to surf",
+    conjugations: {
+      ja: "surfuję",
+      ty: "surfujesz",
+      onOnaOno: "surfuje",
+      my: "surfujemy",
+      wy: "surfujecie",
+      oniOne: "surfują",
+    },
+    group: "-ować (uję, ujesz)",
+  },
+  {
+    infinitive: "dekorować",
+    meaning: "to decorate",
+    conjugations: {
+      ja: "dekoruję",
+      ty: "dekorujesz",
+      onOnaOno: "dekoruje",
+      my: "dekorujemy",
+      wy: "dekorujecie",
+      oniOne: "dekorują",
+    },
+    group: "-ować (uję, ujesz)",
+  },
+  {
+    infinitive: "dyskutować",
+    meaning: "to discuss",
+    conjugations: {
+      ja: "dyskutuję",
+      ty: "dyskutujesz",
+      onOnaOno: "dyskutuje",
+      my: "dyskutujemy",
+      wy: "dyskutujecie",
+      oniOne: "dyskutują",
+    },
+    group: "-ować (uję, ujesz)",
   },
 ];
 

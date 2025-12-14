@@ -2,36 +2,27 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import Link from "next/link";
-import {
-  verbs,
-  pronounLabels,
-  pronounKeys,
-  type PronounKey,
-  type VerbConjugation,
-} from "./data/verbs";
+import { sentences, type SentenceExercise } from "../data/sentences";
 
 type QuestionState = {
-  verb: VerbConjugation;
-  pronoun: PronounKey;
+  sentence: SentenceExercise;
   userAnswer: string;
   isCorrect: boolean | null;
   showAnswer: boolean;
 };
 
 function createInitialQuestion(): QuestionState {
-  const randomVerb = verbs[Math.floor(Math.random() * verbs.length)];
-  const randomPronoun =
-    pronounKeys[Math.floor(Math.random() * pronounKeys.length)];
+  const randomSentence =
+    sentences[Math.floor(Math.random() * sentences.length)];
   return {
-    verb: randomVerb,
-    pronoun: randomPronoun,
+    sentence: randomSentence,
     userAnswer: "",
     isCorrect: null,
     showAnswer: false,
   };
 }
 
-export default function Home() {
+export default function SentencePractice() {
   const [currentQuestion, setCurrentQuestion] = useState<QuestionState>(
     createInitialQuestion
   );
@@ -47,12 +38,9 @@ export default function Home() {
     setShowHint(false);
     setIsAnimating(true);
     setTimeout(() => setIsAnimating(false), 500);
-
-    // Focus input after state update
     setTimeout(() => inputRef.current?.focus(), 100);
   }, []);
 
-  // Focus input on mount
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
@@ -64,8 +52,7 @@ export default function Home() {
   const checkAnswer = () => {
     if (currentQuestion.isCorrect !== null) return;
 
-    const correctAnswer =
-      currentQuestion.verb.conjugations[currentQuestion.pronoun];
+    const correctAnswer = currentQuestion.sentence.answer;
     const isCorrect =
       normalizeAnswer(currentQuestion.userAnswer) ===
       normalizeAnswer(correctAnswer);
@@ -94,7 +81,7 @@ export default function Home() {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      if (currentQuestion?.isCorrect !== null) {
+      if (currentQuestion.isCorrect !== null) {
         generateQuestion();
       } else {
         checkAnswer();
@@ -105,8 +92,11 @@ export default function Home() {
   const accuracy =
     score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
 
+  // Split sentence into parts around the blank
+  const sentenceParts = currentQuestion.sentence.sentence.split("___");
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden py-10">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-5">
         <div
@@ -122,23 +112,23 @@ export default function Home() {
         <div className="pb-4 px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-center bg-gradient-to-r from-white via-slate-200 to-white bg-clip-text text-transparent tracking-tight">
-              Czasowniki Polskie
+              Wypełnij lukę
             </h2>
             <p className="text-slate-400 text-center mt-2 text-lg font-light tracking-wide">
-              Polish Verb Conjugation Practice
+              Fill in the Blank — Sentence Practice
             </p>
 
             {/* Navigation */}
             <div className="flex justify-center gap-4 mt-4">
-              <span className="px-4 py-2 bg-red-600/30 border border-red-500/50 rounded-xl text-red-300 text-sm">
-                Conjugation Practice
-              </span>
               <Link
-                href="/sentences"
+                href="/"
                 className="px-4 py-2 bg-slate-700/50 hover:bg-slate-700 rounded-xl text-slate-300 hover:text-white transition-all text-sm"
               >
-                Sentence Practice →
+                ← Conjugation Practice
               </Link>
+              <span className="px-4 py-2 bg-red-600/30 border border-red-500/50 rounded-xl text-red-300 text-sm">
+                Sentence Practice
+              </span>
             </div>
           </div>
         </div>
@@ -192,40 +182,43 @@ export default function Home() {
         {/* Main content */}
         <main className="flex-1 flex items-center justify-center px-4 py-8">
           <div
-            className={`w-full max-w-2xl transition-all duration-500 ${
+            className={`w-full max-w-3xl transition-all duration-500 ${
               isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
             }`}
           >
             {/* Question card */}
             <div className="bg-slate-800/70 backdrop-blur-xl rounded-3xl border border-slate-700/50 shadow-2xl overflow-hidden">
-              {/* Verb header */}
-              <div className="bg-gradient-to-r from-red-600/20 via-red-500/10 to-red-600/20 px-8 py-6 border-b border-slate-700/50">
-                <div className="text-slate-400 text-sm uppercase tracking-wider mb-2">
-                  Conjugate the verb
-                </div>
-                <div className="text-5xl md:text-6xl font-bold text-white tracking-tight">
-                  {currentQuestion.verb.infinitive}
-                </div>
-                <div className="text-slate-400 mt-2 text-lg italic">
-                  &quot;{currentQuestion.verb.meaning}&quot;
-                </div>
-                <div className="mt-3 inline-block px-3 py-1 bg-slate-700/50 rounded-full text-xs text-slate-300 tracking-wide">
-                  {currentQuestion.verb.group}
+              {/* Verb info header */}
+              <div className="bg-gradient-to-r from-emerald-600/20 via-emerald-500/10 to-emerald-600/20 px-8 py-5 border-b border-slate-700/50">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div>
+                    <div className="text-slate-400 text-sm uppercase tracking-wider mb-1">
+                      Verb
+                    </div>
+                    <div className="text-3xl font-bold text-white">
+                      {currentQuestion.sentence.verb}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-slate-400 text-sm uppercase tracking-wider mb-1">
+                      Pronoun
+                    </div>
+                    <div className="text-xl font-semibold text-emerald-400">
+                      {currentQuestion.sentence.pronoun}
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Pronoun and input */}
+              {/* Sentence with blank */}
               <div className="p-8">
-                <div className="text-center mb-6">
-                  <div className="text-slate-400 text-sm uppercase tracking-wider mb-2">
-                    For the pronoun
-                  </div>
-                  <div className="text-3xl md:text-4xl font-semibold text-white">
-                    {pronounLabels[currentQuestion.pronoun]}
-                  </div>
+                <div className="text-slate-400 text-sm uppercase tracking-wider mb-4 text-center">
+                  Complete the sentence
                 </div>
 
-                <div className="relative">
+                {/* Sentence display with inline input */}
+                <div className="text-2xl md:text-3xl text-center leading-relaxed mb-6 flex flex-wrap items-center justify-center gap-2">
+                  <span className="text-white">{sentenceParts[0]}</span>
                   <input
                     ref={inputRef}
                     type="text"
@@ -238,49 +231,81 @@ export default function Home() {
                     }
                     onKeyDown={handleKeyDown}
                     disabled={currentQuestion.isCorrect !== null}
-                    placeholder="Type your answer..."
-                    className={`w-full px-6 py-4 text-2xl text-center bg-slate-900/50 border-2 rounded-2xl outline-none transition-all duration-300 placeholder:text-slate-600 ${
+                    placeholder="..."
+                    className={`w-40 md:w-52 px-4 py-2 text-center bg-slate-900/50 border-2 border-dashed rounded-xl outline-none transition-all duration-300 placeholder:text-slate-600 ${
                       currentQuestion.isCorrect === null
-                        ? "border-slate-600 focus:border-red-500/50 text-white"
+                        ? "border-slate-500 focus:border-emerald-500/50 text-white"
                         : currentQuestion.isCorrect
-                        ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
-                        : "border-red-500 bg-red-500/10 text-red-400"
+                        ? "border-emerald-500 bg-emerald-500/10 text-emerald-400 border-solid"
+                        : "border-red-500 bg-red-500/10 text-red-400 border-solid"
                     }`}
+                    style={{ fontSize: "inherit" }}
                   />
-
-                  {/* Result indicator */}
-                  {currentQuestion.isCorrect !== null && (
-                    <div
-                      className={`absolute -right-3 -top-3 w-10 h-10 rounded-full flex items-center justify-center text-xl ${
-                        currentQuestion.isCorrect
-                          ? "bg-emerald-500 text-white"
-                          : "bg-red-500 text-white"
-                      }`}
-                    >
-                      {currentQuestion.isCorrect ? "✓" : "✗"}
-                    </div>
-                  )}
+                  <span className="text-white">{sentenceParts[1]}</span>
                 </div>
 
-                {/* Show correct answer when wrong */}
-                {currentQuestion.showAnswer && (
-                  <div className="mt-4 p-4 bg-slate-900/50 rounded-xl border border-slate-700">
-                    <div className="text-slate-400 text-sm mb-1">
-                      Correct answer:
-                    </div>
-                    <div className="text-2xl font-semibold text-emerald-400">
-                      {
-                        currentQuestion.verb.conjugations[
-                          currentQuestion.pronoun
-                        ]
-                      }
-                    </div>
+                {/* Translation */}
+                <div className="text-center mb-6">
+                  <div className="text-slate-500 text-sm italic">
+                    &quot;{currentQuestion.sentence.translation}&quot;
+                  </div>
+                </div>
+
+                {/* Result feedback */}
+                {currentQuestion.isCorrect !== null && (
+                  <div
+                    className={`text-center p-4 rounded-2xl mb-6 ${
+                      currentQuestion.isCorrect
+                        ? "bg-emerald-500/10 border border-emerald-500/30"
+                        : "bg-red-500/10 border border-red-500/30"
+                    }`}
+                  >
+                    {currentQuestion.isCorrect ? (
+                      <div className="flex items-center justify-center gap-3">
+                        <span className="text-4xl">✓</span>
+                        <div>
+                          <div className="text-emerald-400 font-semibold text-lg">
+                            Doskonale!
+                          </div>
+                          <div className="text-emerald-300/70 text-sm">
+                            Excellent!
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <div className="flex items-center justify-center gap-3 mb-3">
+                          <span className="text-4xl">✗</span>
+                          <div>
+                            <div className="text-red-400 font-semibold text-lg">
+                              Nie całkiem...
+                            </div>
+                            <div className="text-red-300/70 text-sm">
+                              Not quite...
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-slate-400 text-sm mb-1">
+                          Correct answer:
+                        </div>
+                        <div className="text-2xl font-semibold text-emerald-400">
+                          {currentQuestion.sentence.answer}
+                        </div>
+                        <div className="text-slate-500 text-sm mt-2">
+                          {sentenceParts[0]}
+                          <span className="text-emerald-400 font-semibold">
+                            {currentQuestion.sentence.answer}
+                          </span>
+                          {sentenceParts[1]}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
 
                 {/* Hint toggle */}
                 {currentQuestion.isCorrect === null && (
-                  <div className="mt-4 text-center">
+                  <div className="text-center mb-6">
                     <button
                       onClick={() => setShowHint(!showHint)}
                       className="text-slate-500 hover:text-slate-300 text-sm transition-colors"
@@ -288,28 +313,30 @@ export default function Home() {
                       {showHint ? "Hide hint" : "Need a hint?"}
                     </button>
                     {showHint && (
-                      <div className="mt-3 p-4 bg-slate-900/50 rounded-xl border border-slate-700">
-                        <div className="text-slate-400 text-sm mb-2">
+                      <div className="mt-3 p-4 bg-slate-900/50 rounded-xl border border-slate-700 inline-block">
+                        <div className="text-slate-400 text-sm mb-1">
                           First letter:
                         </div>
                         <div className="text-xl font-semibold text-amber-400">
-                          {currentQuestion.verb.conjugations[
-                            currentQuestion.pronoun
-                          ].charAt(0)}
-                          ...
+                          {currentQuestion.sentence.answer.charAt(0)}...
                         </div>
+                        {currentQuestion.sentence.hint && (
+                          <div className="text-slate-500 text-xs mt-2">
+                            {currentQuestion.sentence.hint}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
                 )}
 
                 {/* Action buttons */}
-                <div className="mt-8 flex gap-4">
+                <div className="flex gap-4">
                   {currentQuestion.isCorrect === null ? (
                     <button
                       onClick={checkAnswer}
                       disabled={!currentQuestion.userAnswer.trim()}
-                      className="flex-1 py-4 px-8 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 disabled:from-slate-700 disabled:to-slate-700 disabled:cursor-not-allowed text-white font-semibold text-lg rounded-2xl transition-all duration-300 shadow-lg shadow-red-500/20 hover:shadow-red-500/30 disabled:shadow-none"
+                      className="flex-1 py-4 px-8 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 disabled:from-slate-700 disabled:to-slate-700 disabled:cursor-not-allowed text-white font-semibold text-lg rounded-2xl transition-all duration-300 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 disabled:shadow-none"
                     >
                       Check Answer
                     </button>
@@ -318,7 +345,7 @@ export default function Home() {
                       onClick={generateQuestion}
                       className="flex-1 py-4 px-8 bg-gradient-to-r from-slate-600 to-slate-500 hover:from-slate-500 hover:to-slate-400 text-white font-semibold text-lg rounded-2xl transition-all duration-300 shadow-lg"
                     >
-                      Next Question →
+                      Next Sentence →
                     </button>
                   )}
                 </div>
@@ -334,33 +361,20 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Full conjugation table (shown after answer) */}
-            {currentQuestion.isCorrect !== null && (
-              <div className="mt-6 bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-6 animate-fade-in">
-                <h3 className="text-slate-400 text-sm uppercase tracking-wider mb-4">
-                  Full Conjugation Table
-                </h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {pronounKeys.map((key) => (
-                    <div
-                      key={key}
-                      className={`p-3 rounded-xl ${
-                        key === currentQuestion.pronoun
-                          ? "bg-red-500/20 border border-red-500/30"
-                          : "bg-slate-700/30"
-                      }`}
-                    >
-                      <div className="text-slate-400 text-xs mb-1">
-                        {pronounLabels[key]}
-                      </div>
-                      <div className="text-white font-medium">
-                        {currentQuestion.verb.conjugations[key]}
-                      </div>
-                    </div>
-                  ))}
+            {/* Info card */}
+            <div className="mt-6 bg-slate-800/30 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-5">
+              <div className="flex items-start gap-4">
+                <div className="text-2xl">💡</div>
+                <div>
+                  <h3 className="text-white font-semibold mb-1">Tip</h3>
+                  <p className="text-slate-400 text-sm">
+                    Focus on the pronoun and verb pattern. Polish verbs follow
+                    predictable patterns once you learn the endings for each
+                    conjugation group!
+                  </p>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </main>
       </div>
