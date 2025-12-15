@@ -2,7 +2,12 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import Link from "next/link";
-import { type PronounKey, type VerbConjugation } from "./data/verbs";
+import {
+  type PronounKey,
+  type PastTensePronounKey,
+  type VerbConjugation,
+  type Tense,
+} from "./data/verbs";
 import BackgroundPattern from "./components/shared/BackgroundPattern";
 import StatsBar from "./components/shared/StatsBar";
 import QuestionCard from "./components/homepage/QuestionCard";
@@ -10,19 +15,21 @@ import ConjugationTable from "./components/homepage/ConjugationTable";
 
 type QuestionState = {
   verb: VerbConjugation;
-  pronoun: PronounKey;
+  pronoun: PronounKey | PastTensePronounKey;
+  tense: Tense;
   userAnswer: string;
   isCorrect: boolean | null;
   showAnswer: boolean;
 };
 
-async function fetchQuestion(): Promise<QuestionState> {
-  const res = await fetch("/api/question");
+async function fetchQuestion(tense: Tense): Promise<QuestionState> {
+  const res = await fetch(`/api/question?tense=${tense}`);
   const data = await res.json();
 
   return {
     verb: data.verb,
     pronoun: data.pronoun,
+    tense: data.tense,
     userAnswer: "",
     isCorrect: null,
     showAnswer: false,
@@ -38,23 +45,31 @@ export default function Home() {
   const [maxStreak, setMaxStreak] = useState(0);
   const [showHint, setShowHint] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [selectedTense, setSelectedTense] = useState<Tense>("present");
   const inputRef = useRef<HTMLInputElement>(null);
 
   const generateQuestion = useCallback(async () => {
     setShowHint(false);
     setIsAnimating(true);
-    const question = await fetchQuestion();
+    const question = await fetchQuestion(selectedTense);
     setCurrentQuestion(question);
     setTimeout(() => setIsAnimating(false), 500);
     setTimeout(() => inputRef.current?.focus(), 100);
-  }, []);
+  }, [selectedTense]);
 
   useEffect(() => {
-    fetchQuestion().then((question) => {
+    fetchQuestion(selectedTense).then((question) => {
       setCurrentQuestion(question);
       inputRef.current?.focus();
     });
-  }, []);
+  }, [selectedTense]);
+
+  const handleTenseChange = (tense: Tense) => {
+    setSelectedTense(tense);
+    // Reset score when switching tenses
+    setScore({ correct: 0, total: 0 });
+    setStreak(0);
+  };
 
   // Track if answer was just checked to prevent the global listener from firing on the same keypress
   const justCheckedAnswer = useRef(false);
@@ -87,7 +102,13 @@ export default function Home() {
     justCheckedAnswer.current = true;
 
     const correctAnswer =
-      currentQuestion.verb.conjugations[currentQuestion.pronoun];
+      currentQuestion.tense === "past"
+        ? currentQuestion.verb.pastTense[
+            currentQuestion.pronoun as PastTensePronounKey
+          ]
+        : currentQuestion.verb.conjugations[
+            currentQuestion.pronoun as PronounKey
+          ];
     const isCorrect =
       normalizeAnswer(currentQuestion.userAnswer) ===
       normalizeAnswer(correctAnswer);
@@ -178,6 +199,30 @@ export default function Home() {
                 Sentence Practice →
               </Link>
             </div>
+
+            {/* Tense Toggle */}
+            <div className="flex justify-center gap-2 mt-6">
+              <button
+                onClick={() => handleTenseChange("present")}
+                className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${
+                  selectedTense === "present"
+                    ? "bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-lg shadow-emerald-500/30"
+                    : "bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200"
+                }`}
+              >
+                Present Tense
+              </button>
+              <button
+                onClick={() => handleTenseChange("past")}
+                className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${
+                  selectedTense === "past"
+                    ? "bg-gradient-to-r from-amber-600 to-amber-500 text-white shadow-lg shadow-amber-500/30"
+                    : "bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200"
+                }`}
+              >
+                Past Tense
+              </button>
+            </div>
           </div>
         </div>
         <StatsBar score={score} streak={streak} maxStreak={maxStreak} />
@@ -198,12 +243,14 @@ export default function Home() {
               showHint={showHint}
               onToggleHint={() => setShowHint(!showHint)}
               inputRef={inputRef}
+              tense={currentQuestion.tense}
             />
 
             {currentQuestion.isCorrect !== null && (
               <ConjugationTable
                 verb={currentQuestion.verb}
                 currentPronoun={currentQuestion.pronoun}
+                tense={currentQuestion.tense}
               />
             )}
           </div>

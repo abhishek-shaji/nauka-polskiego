@@ -3,13 +3,17 @@
 import { RefObject } from "react";
 import {
   pronounLabels,
+  pastTensePronounLabels,
   type PronounKey,
+  type PastTensePronounKey,
   type VerbConjugation,
+  type Tense,
 } from "../../data/verbs";
 
 type QuestionState = {
   verb: VerbConjugation;
-  pronoun: PronounKey;
+  pronoun: PronounKey | PastTensePronounKey;
+  tense: Tense;
   userAnswer: string;
   isCorrect: boolean | null;
   showAnswer: boolean;
@@ -24,6 +28,7 @@ type QuestionCardProps = {
   showHint: boolean;
   onToggleHint: () => void;
   inputRef: RefObject<HTMLInputElement | null>;
+  tense: Tense;
 };
 
 export default function QuestionCard({
@@ -35,16 +40,43 @@ export default function QuestionCard({
   showHint,
   onToggleHint,
   inputRef,
+  tense,
 }: QuestionCardProps) {
   const correctAnswer =
-    currentQuestion.verb.conjugations[currentQuestion.pronoun];
+    tense === "past"
+      ? currentQuestion.verb.pastTense[
+          currentQuestion.pronoun as PastTensePronounKey
+        ]
+      : currentQuestion.verb.conjugations[currentQuestion.pronoun as PronounKey];
+
+  const pronounLabel =
+    tense === "past"
+      ? pastTensePronounLabels[currentQuestion.pronoun as PastTensePronounKey]
+      : pronounLabels[currentQuestion.pronoun as PronounKey];
 
   return (
     <div className="bg-slate-800/70 backdrop-blur-xl rounded-3xl border border-slate-700/50 shadow-2xl overflow-hidden">
       {/* Verb header */}
-      <div className="bg-gradient-to-r from-red-600/20 via-red-500/10 to-red-600/20 px-8 py-6 border-b border-slate-700/50">
-        <div className="text-slate-400 text-sm uppercase tracking-wider mb-2">
-          Conjugate the verb
+      <div
+        className={`px-8 py-6 border-b border-slate-700/50 ${
+          tense === "past"
+            ? "bg-gradient-to-r from-amber-600/20 via-amber-500/10 to-amber-600/20"
+            : "bg-gradient-to-r from-red-600/20 via-red-500/10 to-red-600/20"
+        }`}
+      >
+        <div className="flex items-center justify-between mb-2">
+          <div className="text-slate-400 text-sm uppercase tracking-wider">
+            Conjugate the verb
+          </div>
+          <span
+            className={`px-3 py-1 rounded-full text-xs font-medium ${
+              tense === "past"
+                ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+            }`}
+          >
+            {tense === "past" ? "Past Tense" : "Present Tense"}
+          </span>
         </div>
         <div className="text-5xl md:text-6xl font-bold text-white tracking-tight">
           {currentQuestion.verb.infinitive}
@@ -64,7 +96,7 @@ export default function QuestionCard({
             For the pronoun
           </div>
           <div className="text-3xl md:text-4xl font-semibold text-white">
-            {pronounLabels[currentQuestion.pronoun]}
+            {pronounLabel}
           </div>
         </div>
 
