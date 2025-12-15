@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   type PronounKey,
   type PastTensePronounKey,
+  type FutureTensePronounKey,
   type VerbConjugation,
   type Tense,
 } from "./data/verbs";
@@ -15,7 +16,7 @@ import ConjugationTable from "./components/homepage/ConjugationTable";
 
 type QuestionState = {
   verb: VerbConjugation;
-  pronoun: PronounKey | PastTensePronounKey;
+  pronoun: PronounKey | PastTensePronounKey | FutureTensePronounKey;
   tense: Tense;
   userAnswer: string;
   isCorrect: boolean | null;
@@ -102,7 +103,11 @@ export default function Home() {
     justCheckedAnswer.current = true;
 
     const correctAnswer =
-      currentQuestion.tense === "past"
+      currentQuestion.tense === "future"
+        ? currentQuestion.verb.futureTense[
+            currentQuestion.pronoun as FutureTensePronounKey
+          ]
+        : currentQuestion.tense === "past"
         ? currentQuestion.verb.pastTense[
             currentQuestion.pronoun as PastTensePronounKey
           ]
@@ -221,6 +226,16 @@ export default function Home() {
                 }`}
               >
                 Past Tense
+              </button>
+              <button
+                onClick={() => handleTenseChange("future")}
+                className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${
+                  selectedTense === "future"
+                    ? "bg-gradient-to-r from-sky-600 to-sky-500 text-white shadow-lg shadow-sky-500/30"
+                    : "bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200"
+                }`}
+              >
+                Future Tense
               </button>
             </div>
           </div>

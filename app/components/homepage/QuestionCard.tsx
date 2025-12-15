@@ -4,15 +4,17 @@ import { RefObject } from "react";
 import {
   pronounLabels,
   pastTensePronounLabels,
+  futureTensePronounLabels,
   type PronounKey,
   type PastTensePronounKey,
+  type FutureTensePronounKey,
   type VerbConjugation,
   type Tense,
 } from "../../data/verbs";
 
 type QuestionState = {
   verb: VerbConjugation;
-  pronoun: PronounKey | PastTensePronounKey;
+  pronoun: PronounKey | PastTensePronounKey | FutureTensePronounKey;
   tense: Tense;
   userAnswer: string;
   isCorrect: boolean | null;
@@ -43,14 +45,20 @@ export default function QuestionCard({
   tense,
 }: QuestionCardProps) {
   const correctAnswer =
-    tense === "past"
+    tense === "future"
+      ? currentQuestion.verb.futureTense[
+          currentQuestion.pronoun as FutureTensePronounKey
+        ]
+      : tense === "past"
       ? currentQuestion.verb.pastTense[
           currentQuestion.pronoun as PastTensePronounKey
         ]
       : currentQuestion.verb.conjugations[currentQuestion.pronoun as PronounKey];
 
   const pronounLabel =
-    tense === "past"
+    tense === "future"
+      ? futureTensePronounLabels[currentQuestion.pronoun as FutureTensePronounKey]
+      : tense === "past"
       ? pastTensePronounLabels[currentQuestion.pronoun as PastTensePronounKey]
       : pronounLabels[currentQuestion.pronoun as PronounKey];
 
@@ -59,7 +67,9 @@ export default function QuestionCard({
       {/* Verb header */}
       <div
         className={`px-8 py-6 border-b border-slate-700/50 ${
-          tense === "past"
+          tense === "future"
+            ? "bg-gradient-to-r from-sky-600/20 via-sky-500/10 to-sky-600/20"
+            : tense === "past"
             ? "bg-gradient-to-r from-amber-600/20 via-amber-500/10 to-amber-600/20"
             : "bg-gradient-to-r from-red-600/20 via-red-500/10 to-red-600/20"
         }`}
@@ -70,12 +80,14 @@ export default function QuestionCard({
           </div>
           <span
             className={`px-3 py-1 rounded-full text-xs font-medium ${
-              tense === "past"
+              tense === "future"
+                ? "bg-sky-500/20 text-sky-300 border border-sky-500/30"
+                : tense === "past"
                 ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
                 : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
             }`}
           >
-            {tense === "past" ? "Past Tense" : "Present Tense"}
+            {tense === "future" ? "Future Tense" : tense === "past" ? "Past Tense" : "Present Tense"}
           </span>
         </div>
         <div className="text-5xl md:text-6xl font-bold text-white tracking-tight">

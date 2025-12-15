@@ -3,15 +3,18 @@ import {
   pronounKeys,
   pastTensePronounLabels,
   pastTensePronounKeys,
+  futureTensePronounLabels,
+  futureTensePronounKeys,
   type PronounKey,
   type PastTensePronounKey,
+  type FutureTensePronounKey,
   type VerbConjugation,
   type Tense,
 } from "../../data/verbs";
 
 type ConjugationTableProps = {
   verb: VerbConjugation;
-  currentPronoun: PronounKey | PastTensePronounKey;
+  currentPronoun: PronounKey | PastTensePronounKey | FutureTensePronounKey;
   tense: Tense;
 };
 
@@ -20,6 +23,35 @@ export default function ConjugationTable({
   currentPronoun,
   tense,
 }: ConjugationTableProps) {
+  if (tense === "future") {
+    return (
+      <div className="mt-6 bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-6 animate-fade-in">
+        <h3 className="text-slate-400 text-sm uppercase tracking-wider mb-4">
+          Full Future Tense Conjugation Table
+        </h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          {futureTensePronounKeys.map((key) => (
+            <div
+              key={key}
+              className={`p-3 rounded-xl ${
+                key === currentPronoun
+                  ? "bg-sky-500/20 border border-sky-500/30"
+                  : "bg-slate-700/30"
+              }`}
+            >
+              <div className="text-slate-400 text-xs mb-1">
+                {futureTensePronounLabels[key]}
+              </div>
+              <div className="text-white font-medium">
+                {verb.futureTense[key]}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   if (tense === "past") {
     return (
       <div className="mt-6 bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-6 animate-fade-in">

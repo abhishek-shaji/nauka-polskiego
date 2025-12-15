@@ -1,11 +1,21 @@
 import { NextResponse } from "next/server";
-import { verbs, pronounKeys, pastTensePronounKeys, type Tense } from "../../data/verbs";
+import { verbs, pronounKeys, pastTensePronounKeys, futureTensePronounKeys, type Tense } from "../../data/verbs";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const tense = (searchParams.get("tense") as Tense) || "present";
 
   const randomVerb = verbs[Math.floor(Math.random() * verbs.length)];
+
+  if (tense === "future") {
+    const randomPronoun =
+      futureTensePronounKeys[Math.floor(Math.random() * futureTensePronounKeys.length)];
+    return NextResponse.json({
+      verb: randomVerb,
+      pronoun: randomPronoun,
+      tense: "future",
+    });
+  }
 
   if (tense === "past") {
     const randomPronoun =
