@@ -65,7 +65,7 @@ export default function SentenceCard({
         </div>
 
         {/* Sentence display with inline input */}
-        <div className="text-2xl md:text-3xl text-center leading-relaxed mb-6 flex flex-wrap items-center justify-center gap-2">
+        <div className="text-2xl md:text-3xl text-center leading-relaxed mb-6 flex flex-wrap items-center justify-center gap-4">
           <span className="text-white">{sentenceParts[0]}</span>
           <input
             ref={inputRef}

@@ -56,12 +56,35 @@ export default function Home() {
     });
   }, []);
 
+  // Track if answer was just checked to prevent the global listener from firing on the same keypress
+  const justCheckedAnswer = useRef(false);
+
+  // Global keyboard listener for Enter key when answer has been checked
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter" && currentQuestion?.isCorrect !== null) {
+        // Skip if we just checked the answer on this same keypress
+        if (justCheckedAnswer.current) {
+          justCheckedAnswer.current = false;
+          return;
+        }
+        generateQuestion();
+      }
+    };
+
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+  }, [currentQuestion?.isCorrect, generateQuestion]);
+
   const normalizeAnswer = (answer: string): string => {
     return answer.toLowerCase().trim();
   };
 
   const checkAnswer = () => {
     if (!currentQuestion || currentQuestion.isCorrect !== null) return;
+
+    // Mark that we just checked an answer so the global listener doesn't fire on this same keypress
+    justCheckedAnswer.current = true;
 
     const correctAnswer =
       currentQuestion.verb.conjugations[currentQuestion.pronoun];
@@ -157,11 +180,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-
         <StatsBar score={score} streak={streak} maxStreak={maxStreak} />
 
         {/* Main content */}
-        <main className="flex-1 flex items-center justify-center px-4 py-8">
+        <main className="flex items-center justify-center px-4 py-20">
           <div
             className={`w-full max-w-2xl transition-all duration-500 ${
               isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
