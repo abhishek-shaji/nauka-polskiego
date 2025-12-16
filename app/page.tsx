@@ -24,10 +24,13 @@ type QuestionState = {
   showAnswer: boolean;
 };
 
-async function fetchQuestion(tense: Tense, group: string | null): Promise<QuestionState> {
+async function fetchQuestion(
+  tense: Tense,
+  group: string | null
+): Promise<QuestionState> {
   const params = new URLSearchParams({ tense });
   if (group) params.append("group", group);
-  
+
   const res = await fetch(`/api/question?${params}`);
   const data = await res.json();
 
@@ -197,10 +200,10 @@ export default function Home() {
         {/* Page Header */}
         <div className="pb-4 px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center bg-gradient-to-r from-white via-slate-200 to-white bg-clip-text text-transparent tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-bold text-center bg-gradient-to-r from-white via-slate-200 to-white bg-clip-text text-transparent tracking-tight">
               Czasowniki Polskie
             </h2>
-            <p className="text-slate-400 text-center mt-2 text-lg font-light tracking-wide">
+            <p className="text-slate-400 text-center mt-2 text-lg tracking-wide">
               Polish Verb Conjugation Practice
             </p>
 

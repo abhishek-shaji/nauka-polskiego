@@ -27,7 +27,7 @@ export default function StatsBar({ score, streak, maxStreak }: StatsBarProps) {
               Accuracy
             </div>
             <div
-              className={`text-2xl font-bold ${
+              className={`text-2xl font-bold text-center ${
                 accuracy >= 80
                   ? "text-emerald-400"
                   : accuracy >= 50
@@ -43,9 +43,9 @@ export default function StatsBar({ score, streak, maxStreak }: StatsBarProps) {
             <div className="text-slate-400 text-xs uppercase tracking-wider mb-1">
               Streak
             </div>
-            <div className="text-2xl font-bold text-amber-400">
+            <div className="text-2xl font-bold text-amber-400 text-center">
               {streak}
-              <span className="text-slate-500 text-sm ml-1">
+              <span className="text-slate-500 text-sm ml-1 block text-center">
                 (best: {maxStreak})
               </span>
             </div>

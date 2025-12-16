@@ -18,11 +18,14 @@ type QuestionState = {
 
 type TenseFilter = Tense | "all";
 
-async function fetchSentence(tenseFilter: TenseFilter, groupFilter: string | null): Promise<QuestionState> {
+async function fetchSentence(
+  tenseFilter: TenseFilter,
+  groupFilter: string | null
+): Promise<QuestionState> {
   const params = new URLSearchParams();
   if (tenseFilter !== "all") params.append("tense", tenseFilter);
   if (groupFilter) params.append("group", groupFilter);
-  
+
   const url = params.toString() ? `/api/sentence?${params}` : "/api/sentence";
   const res = await fetch(url);
   const sentence = await res.json();
@@ -178,10 +181,10 @@ export default function SentencePractice() {
         {/* Page Header */}
         <div className="pb-4 px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center bg-gradient-to-r from-white via-slate-200 to-white bg-clip-text text-transparent tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-bold text-center bg-gradient-to-r from-white via-slate-200 to-white bg-clip-text text-transparent tracking-tight">
               Wypełnij lukę
             </h2>
-            <p className="text-slate-400 text-center mt-2 text-lg font-light tracking-wide">
+            <p className="text-slate-400 text-center mt-2 text-lg tracking-wide">
               Fill in the Blank — Sentence Practice
             </p>
 

@@ -1,18 +1,26 @@
 import type { Metadata } from "next";
-import { Lora, JetBrains_Mono } from "next/font/google";
+import { Inter, Red_Hat_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-const lora = Lora({
-  variable: "--font-lora",
+const inter = Inter({
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
+const redHatDisplay = Red_Hat_Display({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-red-hat-display",
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin", "latin-ext"],
+  display: "swap",
+  variable: "--font-geist-mono",
 });
 
 export const metadata: Metadata = {
@@ -91,7 +99,7 @@ export default function RootLayout({
         <meta name="google-site-verification" content="" />
       </head>
       <body
-        className={`${lora.variable} ${jetbrainsMono.variable} antialiased min-h-screen flex flex-col`}
+        className={`${inter.variable} ${inter.className} ${redHatDisplay.variable} ${jetbrainsMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <Header />
         <main className="flex-1">{children}</main>
