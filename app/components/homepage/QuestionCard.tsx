@@ -53,11 +53,15 @@ export default function QuestionCard({
       ? currentQuestion.verb.pastTense[
           currentQuestion.pronoun as PastTensePronounKey
         ]
-      : currentQuestion.verb.conjugations[currentQuestion.pronoun as PronounKey];
+      : currentQuestion.verb.conjugations[
+          currentQuestion.pronoun as PronounKey
+        ];
 
   const pronounLabel =
     tense === "future"
-      ? futureTensePronounLabels[currentQuestion.pronoun as FutureTensePronounKey]
+      ? futureTensePronounLabels[
+          currentQuestion.pronoun as FutureTensePronounKey
+        ]
       : tense === "past"
       ? pastTensePronounLabels[currentQuestion.pronoun as PastTensePronounKey]
       : pronounLabels[currentQuestion.pronoun as PronounKey];
@@ -75,11 +79,11 @@ export default function QuestionCard({
         }`}
       >
         <div className="flex items-center justify-between mb-2">
-          <div className="text-slate-400 text-sm uppercase tracking-wider">
+          <div className="text-slate-400 text-sm uppercase tracking-wider font-medium">
             Conjugate the verb
           </div>
           <span
-            className={`px-3 py-1 rounded-full text-xs font-medium ${
+            className={`px-3 py-1 rounded-full text-xs font-semibold ${
               tense === "future"
                 ? "bg-sky-500/20 text-sky-300 border border-sky-500/30"
                 : tense === "past"
@@ -87,10 +91,14 @@ export default function QuestionCard({
                 : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
             }`}
           >
-            {tense === "future" ? "Future Tense" : tense === "past" ? "Past Tense" : "Present Tense"}
+            {tense === "future"
+              ? "Future Tense"
+              : tense === "past"
+              ? "Past Tense"
+              : "Present Tense"}
           </span>
         </div>
-        <div className="text-5xl md:text-6xl font-bold text-white tracking-tight">
+        <div className="text-5xl md:text-6xl font-extrabold text-white tracking-tight">
           {currentQuestion.verb.infinitive}
         </div>
         <div className="text-slate-400 mt-2 text-lg italic">
@@ -104,10 +112,10 @@ export default function QuestionCard({
       {/* Pronoun and input */}
       <div className="p-8">
         <div className="text-center mb-6">
-          <div className="text-slate-400 text-sm uppercase tracking-wider mb-2">
+          <div className="text-slate-400 text-sm uppercase tracking-wider mb-2 font-medium">
             For the pronoun
           </div>
-          <div className="text-3xl md:text-4xl font-semibold text-white">
+          <div className="text-3xl md:text-4xl font-bold text-white">
             {pronounLabel}
           </div>
         </div>

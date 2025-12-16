@@ -33,6 +33,12 @@ export default function Header() {
               Verbs
             </Link>
             <Link
+              href="/biernik"
+              className="px-3 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-all"
+            >
+              Biernik
+            </Link>
+            <Link
               href="/sentences"
               className="px-3 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-all"
             >
