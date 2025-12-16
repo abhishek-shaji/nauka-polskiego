@@ -47,6 +47,33 @@ export default function SentenceCard({
               {currentQuestion.sentence.verb}
             </div>
           </div>
+          <div className="text-center">
+            <div className="text-slate-400 text-sm uppercase tracking-wider mb-1">
+              Tense
+            </div>
+            <div
+              className={`text-sm font-semibold px-3 py-1 rounded-full inline-block ${
+                currentQuestion.sentence.tense === "present"
+                  ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+                  : currentQuestion.sentence.tense === "past"
+                  ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+                  : "bg-purple-500/20 text-purple-400 border border-purple-500/30"
+              }`}
+            >
+              {currentQuestion.sentence.tense === "present"
+                ? "Teraźniejszy"
+                : currentQuestion.sentence.tense === "past"
+                ? "Przeszły"
+                : "Przyszły"}
+            </div>
+            <div className="text-xs text-slate-500 mt-1">
+              {currentQuestion.sentence.tense === "present"
+                ? "Present"
+                : currentQuestion.sentence.tense === "past"
+                ? "Past"
+                : "Future"}
+            </div>
+          </div>
           <div className="text-right">
             <div className="text-slate-400 text-sm uppercase tracking-wider mb-1">
               Pronoun

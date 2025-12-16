@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import Link from "next/link";
-import { type SentenceExercise } from "../data/sentences";
+import { type SentenceExercise, type Tense } from "../data/sentences";
 import BackgroundPattern from "../components/shared/BackgroundPattern";
 import StatsBar from "../components/shared/StatsBar";
 import SentenceCard from "../components/sentences/SentenceCard";
@@ -15,8 +15,14 @@ type QuestionState = {
   showAnswer: boolean;
 };
 
-async function fetchSentence(): Promise<QuestionState> {
-  const res = await fetch("/api/sentence");
+type TenseFilter = Tense | "all";
+
+async function fetchSentence(tenseFilter: TenseFilter): Promise<QuestionState> {
+  const url =
+    tenseFilter === "all"
+      ? "/api/sentence"
+      : `/api/sentence?tense=${tenseFilter}`;
+  const res = await fetch(url);
   const sentence = await res.json();
   return {
     sentence,
@@ -35,23 +41,24 @@ export default function SentencePractice() {
   const [maxStreak, setMaxStreak] = useState(0);
   const [showHint, setShowHint] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [tenseFilter, setTenseFilter] = useState<TenseFilter>("all");
   const inputRef = useRef<HTMLInputElement>(null);
 
   const generateQuestion = useCallback(async () => {
     setShowHint(false);
     setIsAnimating(true);
-    const question = await fetchSentence();
+    const question = await fetchSentence(tenseFilter);
     setCurrentQuestion(question);
     setTimeout(() => setIsAnimating(false), 500);
     setTimeout(() => inputRef.current?.focus(), 100);
-  }, []);
+  }, [tenseFilter]);
 
   useEffect(() => {
-    fetchSentence().then((question) => {
+    fetchSentence(tenseFilter).then((question) => {
       setCurrentQuestion(question);
       inputRef.current?.focus();
     });
-  }, []);
+  }, [tenseFilter]);
 
   // Track if answer was just checked to prevent the global listener from firing on the same keypress
   const justCheckedAnswer = useRef(false);
@@ -172,6 +179,55 @@ export default function SentencePractice() {
               <span className="px-4 py-2 bg-red-600/30 border border-red-500/50 rounded-xl text-red-300 text-sm">
                 Sentence Practice
               </span>
+            </div>
+
+            {/* Tense Filter */}
+            <div className="flex flex-col items-center gap-2 mt-6">
+              <div className="text-slate-400 text-sm uppercase tracking-wider">
+                Filter by Tense
+              </div>
+              <div className="flex flex-wrap justify-center gap-2">
+                <button
+                  onClick={() => setTenseFilter("all")}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                    tenseFilter === "all"
+                      ? "bg-emerald-600/30 border border-emerald-500/50 text-emerald-300"
+                      : "bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white"
+                  }`}
+                >
+                  All Tenses
+                </button>
+                <button
+                  onClick={() => setTenseFilter("present")}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                    tenseFilter === "present"
+                      ? "bg-blue-600/30 border border-blue-500/50 text-blue-300"
+                      : "bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white"
+                  }`}
+                >
+                  Teraźniejszy (Present)
+                </button>
+                <button
+                  onClick={() => setTenseFilter("past")}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                    tenseFilter === "past"
+                      ? "bg-amber-600/30 border border-amber-500/50 text-amber-300"
+                      : "bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white"
+                  }`}
+                >
+                  Przeszły (Past)
+                </button>
+                <button
+                  onClick={() => setTenseFilter("future")}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                    tenseFilter === "future"
+                      ? "bg-purple-600/30 border border-purple-500/50 text-purple-300"
+                      : "bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white"
+                  }`}
+                >
+                  Przyszły (Future)
+                </button>
+              </div>
             </div>
           </div>
         </div>
