@@ -4163,3 +4163,13 @@ export const futureTensePronounKeys: FutureTensePronounKey[] = [
   "oni",
   "one",
 ];
+
+// Get unique verb groups from the verbs array
+export const verbGroups: string[] = [
+  ...new Set(verbs.map((v) => v.group)),
+].sort((a, b) => {
+  // Put "irregular" at the end
+  if (a === "irregular") return 1;
+  if (b === "irregular") return -1;
+  return a.localeCompare(b);
+});

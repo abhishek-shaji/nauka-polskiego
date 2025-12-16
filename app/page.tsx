@@ -8,6 +8,7 @@ import {
   type FutureTensePronounKey,
   type VerbConjugation,
   type Tense,
+  verbGroups,
 } from "./data/verbs";
 import BackgroundPattern from "./components/shared/BackgroundPattern";
 import StatsBar from "./components/shared/StatsBar";
@@ -23,8 +24,11 @@ type QuestionState = {
   showAnswer: boolean;
 };
 
-async function fetchQuestion(tense: Tense): Promise<QuestionState> {
-  const res = await fetch(`/api/question?tense=${tense}`);
+async function fetchQuestion(tense: Tense, group: string | null): Promise<QuestionState> {
+  const params = new URLSearchParams({ tense });
+  if (group) params.append("group", group);
+  
+  const res = await fetch(`/api/question?${params}`);
   const data = await res.json();
 
   return {
@@ -47,27 +51,35 @@ export default function Home() {
   const [showHint, setShowHint] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [selectedTense, setSelectedTense] = useState<Tense>("present");
+  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const generateQuestion = useCallback(async () => {
     setShowHint(false);
     setIsAnimating(true);
-    const question = await fetchQuestion(selectedTense);
+    const question = await fetchQuestion(selectedTense, selectedGroup);
     setCurrentQuestion(question);
     setTimeout(() => setIsAnimating(false), 500);
     setTimeout(() => inputRef.current?.focus(), 100);
-  }, [selectedTense]);
+  }, [selectedTense, selectedGroup]);
 
   useEffect(() => {
-    fetchQuestion(selectedTense).then((question) => {
+    fetchQuestion(selectedTense, selectedGroup).then((question) => {
       setCurrentQuestion(question);
       inputRef.current?.focus();
     });
-  }, [selectedTense]);
+  }, [selectedTense, selectedGroup]);
 
   const handleTenseChange = (tense: Tense) => {
     setSelectedTense(tense);
     // Reset score when switching tenses
+    setScore({ correct: 0, total: 0 });
+    setStreak(0);
+  };
+
+  const handleGroupChange = (group: string | null) => {
+    setSelectedGroup(group);
+    // Reset score when switching groups
     setScore({ correct: 0, total: 0 });
     setStreak(0);
   };
@@ -237,6 +249,33 @@ export default function Home() {
               >
                 Future Tense
               </button>
+            </div>
+
+            {/* Group Selector */}
+            <div className="flex justify-center gap-2 mt-4 flex-wrap max-w-3xl mx-auto">
+              <button
+                onClick={() => handleGroupChange(null)}
+                className={`px-4 py-2 rounded-lg font-medium text-xs transition-all duration-300 ${
+                  selectedGroup === null
+                    ? "bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/30"
+                    : "bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200"
+                }`}
+              >
+                All Groups
+              </button>
+              {verbGroups.map((group) => (
+                <button
+                  key={group}
+                  onClick={() => handleGroupChange(group)}
+                  className={`px-4 py-2 rounded-lg font-medium text-xs transition-all duration-300 ${
+                    selectedGroup === group
+                      ? "bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/30"
+                      : "bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200"
+                  }`}
+                >
+                  {group}
+                </button>
+              ))}
             </div>
           </div>
         </div>

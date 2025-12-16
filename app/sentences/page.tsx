@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import Link from "next/link";
 import { type SentenceExercise, type Tense } from "../data/sentences";
+import { verbGroups } from "../data/verbs";
 import BackgroundPattern from "../components/shared/BackgroundPattern";
 import StatsBar from "../components/shared/StatsBar";
 import SentenceCard from "../components/sentences/SentenceCard";
@@ -17,11 +18,12 @@ type QuestionState = {
 
 type TenseFilter = Tense | "all";
 
-async function fetchSentence(tenseFilter: TenseFilter): Promise<QuestionState> {
-  const url =
-    tenseFilter === "all"
-      ? "/api/sentence"
-      : `/api/sentence?tense=${tenseFilter}`;
+async function fetchSentence(tenseFilter: TenseFilter, groupFilter: string | null): Promise<QuestionState> {
+  const params = new URLSearchParams();
+  if (tenseFilter !== "all") params.append("tense", tenseFilter);
+  if (groupFilter) params.append("group", groupFilter);
+  
+  const url = params.toString() ? `/api/sentence?${params}` : "/api/sentence";
   const res = await fetch(url);
   const sentence = await res.json();
   return {
@@ -42,23 +44,38 @@ export default function SentencePractice() {
   const [showHint, setShowHint] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [tenseFilter, setTenseFilter] = useState<TenseFilter>("all");
+  const [groupFilter, setGroupFilter] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const generateQuestion = useCallback(async () => {
     setShowHint(false);
     setIsAnimating(true);
-    const question = await fetchSentence(tenseFilter);
+    const question = await fetchSentence(tenseFilter, groupFilter);
     setCurrentQuestion(question);
     setTimeout(() => setIsAnimating(false), 500);
     setTimeout(() => inputRef.current?.focus(), 100);
-  }, [tenseFilter]);
+  }, [tenseFilter, groupFilter]);
 
   useEffect(() => {
-    fetchSentence(tenseFilter).then((question) => {
+    fetchSentence(tenseFilter, groupFilter).then((question) => {
       setCurrentQuestion(question);
       inputRef.current?.focus();
     });
-  }, [tenseFilter]);
+  }, [tenseFilter, groupFilter]);
+
+  const handleTenseChange = (tense: TenseFilter) => {
+    setTenseFilter(tense);
+    // Reset score when switching tenses
+    setScore({ correct: 0, total: 0 });
+    setStreak(0);
+  };
+
+  const handleGroupChange = (group: string | null) => {
+    setGroupFilter(group);
+    // Reset score when switching groups
+    setScore({ correct: 0, total: 0 });
+    setStreak(0);
+  };
 
   // Track if answer was just checked to prevent the global listener from firing on the same keypress
   const justCheckedAnswer = useRef(false);
@@ -188,7 +205,7 @@ export default function SentencePractice() {
               </div>
               <div className="flex flex-wrap justify-center gap-2">
                 <button
-                  onClick={() => setTenseFilter("all")}
+                  onClick={() => handleTenseChange("all")}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                     tenseFilter === "all"
                       ? "bg-emerald-600/30 border border-emerald-500/50 text-emerald-300"
@@ -198,7 +215,7 @@ export default function SentencePractice() {
                   All Tenses
                 </button>
                 <button
-                  onClick={() => setTenseFilter("present")}
+                  onClick={() => handleTenseChange("present")}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                     tenseFilter === "present"
                       ? "bg-blue-600/30 border border-blue-500/50 text-blue-300"
@@ -208,7 +225,7 @@ export default function SentencePractice() {
                   Teraźniejszy (Present)
                 </button>
                 <button
-                  onClick={() => setTenseFilter("past")}
+                  onClick={() => handleTenseChange("past")}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                     tenseFilter === "past"
                       ? "bg-amber-600/30 border border-amber-500/50 text-amber-300"
@@ -218,7 +235,7 @@ export default function SentencePractice() {
                   Przeszły (Past)
                 </button>
                 <button
-                  onClick={() => setTenseFilter("future")}
+                  onClick={() => handleTenseChange("future")}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                     tenseFilter === "future"
                       ? "bg-purple-600/30 border border-purple-500/50 text-purple-300"
@@ -227,6 +244,38 @@ export default function SentencePractice() {
                 >
                   Przyszły (Future)
                 </button>
+              </div>
+            </div>
+
+            {/* Group Filter */}
+            <div className="flex flex-col items-center gap-2 mt-4">
+              <div className="text-slate-400 text-sm uppercase tracking-wider">
+                Filter by Group
+              </div>
+              <div className="flex flex-wrap justify-center gap-2 max-w-3xl">
+                <button
+                  onClick={() => handleGroupChange(null)}
+                  className={`px-4 py-2 rounded-lg font-medium text-xs transition-all duration-300 ${
+                    groupFilter === null
+                      ? "bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/30"
+                      : "bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200"
+                  }`}
+                >
+                  All Groups
+                </button>
+                {verbGroups.map((group) => (
+                  <button
+                    key={group}
+                    onClick={() => handleGroupChange(group)}
+                    className={`px-4 py-2 rounded-lg font-medium text-xs transition-all duration-300 ${
+                      groupFilter === group
+                        ? "bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/30"
+                        : "bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200"
+                    }`}
+                  >
+                    {group}
+                  </button>
+                ))}
               </div>
             </div>
           </div>

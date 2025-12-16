@@ -4,8 +4,15 @@ import { verbs, pronounKeys, pastTensePronounKeys, futureTensePronounKeys, type 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const tense = (searchParams.get("tense") as Tense) || "present";
+  const group = searchParams.get("group");
 
-  const randomVerb = verbs[Math.floor(Math.random() * verbs.length)];
+  // Filter verbs by group if specified
+  const filteredVerbs = group ? verbs.filter((v) => v.group === group) : verbs;
+  
+  // Fall back to all verbs if the filter results in empty array
+  const verbPool = filteredVerbs.length > 0 ? filteredVerbs : verbs;
+  
+  const randomVerb = verbPool[Math.floor(Math.random() * verbPool.length)];
 
   if (tense === "future") {
     const randomPronoun =
