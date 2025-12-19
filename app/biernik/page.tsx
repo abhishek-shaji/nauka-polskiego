@@ -172,6 +172,7 @@ export default function BiernikPractice() {
             { href: "/", label: "← Conjugation" },
             { href: "/biernik", label: "Biernik", isActive: true },
             { href: "/dopelniacz", label: "Dopełniacz" },
+            { href: "/celownik", label: "Celownik" },
             { href: "/narzednik", label: "Narzędnik" },
             { href: "/sentences", label: "Sentences →" },
           ]}

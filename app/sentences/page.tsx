@@ -187,6 +187,7 @@ export default function SentencePractice() {
             { href: "/", label: "← Conjugation" },
             { href: "/biernik", label: "Biernik" },
             { href: "/dopelniacz", label: "Dopełniacz" },
+            { href: "/celownik", label: "Celownik" },
             { href: "/narzednik", label: "Narzędnik" },
             { href: "/sentences", label: "Sentences", isActive: true },
           ]}

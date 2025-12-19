@@ -172,6 +172,7 @@ export default function DopelniaczPractice() {
             { href: "/", label: "← Conjugation" },
             { href: "/biernik", label: "Biernik" },
             { href: "/dopelniacz", label: "Dopełniacz", isActive: true },
+            { href: "/celownik", label: "Celownik" },
             { href: "/narzednik", label: "Narzędnik" },
             { href: "/sentences", label: "Sentences →" },
           ]}

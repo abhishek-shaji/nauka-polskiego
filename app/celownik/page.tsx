@@ -1,27 +1,27 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { type NarzednikExercise, narzednikCategories } from "../data/narzednik";
+import { type CelownikExercise, celownikCategories } from "../data/celownik";
 import BackgroundPattern from "../components/shared/BackgroundPattern";
 import StatsBar from "../components/shared/StatsBar";
 import CasePageHeader from "../components/shared/CasePageHeader";
-import NarzednikCard from "../components/narzednik/NarzednikCard";
-import GrammarTipCard from "../components/narzednik/GrammarTipCard";
+import CelownikCard from "../components/celownik/CelownikCard";
+import GrammarTipCard from "../components/celownik/GrammarTipCard";
 
 type QuestionState = {
-  sentence: NarzednikExercise;
+  sentence: CelownikExercise;
   userAnswer: string;
   isCorrect: boolean | null;
   showAnswer: boolean;
 };
 
-async function fetchNarzednikQuestion(
+async function fetchCelownikQuestion(
   category: string | null
 ): Promise<QuestionState> {
   const params = new URLSearchParams();
   if (category) params.append("category", category);
 
-  const url = params.toString() ? `/api/narzednik?${params}` : "/api/narzednik";
+  const url = params.toString() ? `/api/celownik?${params}` : "/api/celownik";
   const res = await fetch(url);
   const sentence = await res.json();
 
@@ -33,7 +33,7 @@ async function fetchNarzednikQuestion(
   };
 }
 
-export default function NarzednikPractice() {
+export default function CelownikPractice() {
   const [currentQuestion, setCurrentQuestion] = useState<QuestionState | null>(
     null
   );
@@ -48,14 +48,14 @@ export default function NarzednikPractice() {
   const generateQuestion = useCallback(async () => {
     setShowHint(false);
     setIsAnimating(true);
-    const question = await fetchNarzednikQuestion(selectedCategory);
+    const question = await fetchCelownikQuestion(selectedCategory);
     setCurrentQuestion(question);
     setTimeout(() => setIsAnimating(false), 500);
     setTimeout(() => inputRef.current?.focus(), 100);
   }, [selectedCategory]);
 
   useEffect(() => {
-    fetchNarzednikQuestion(selectedCategory).then((question) => {
+    fetchCelownikQuestion(selectedCategory).then((question) => {
       setCurrentQuestion(question);
       inputRef.current?.focus();
     });
@@ -165,15 +165,15 @@ export default function NarzednikPractice() {
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* Page Header */}
         <CasePageHeader
-          title="Narzędnik"
-          subtitle="Instrumental Case Practice — Z kim? Czym?"
-          accentColor="orange"
+          title="Celownik"
+          subtitle="Dative Case Practice — Komu? Czemu?"
+          accentColor="amber"
           navItems={[
             { href: "/", label: "← Conjugation" },
             { href: "/biernik", label: "Biernik" },
             { href: "/dopelniacz", label: "Dopełniacz" },
-            { href: "/celownik", label: "Celownik" },
-            { href: "/narzednik", label: "Narzędnik", isActive: true },
+            { href: "/celownik", label: "Celownik", isActive: true },
+            { href: "/narzednik", label: "Narzędnik" },
             { href: "/sentences", label: "Sentences →" },
           ]}
         />
@@ -190,19 +190,19 @@ export default function NarzednikPractice() {
                   onClick={() => handleCategoryChange(null)}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                     selectedCategory === null
-                      ? "bg-orange-600/30 border border-orange-500/50 text-orange-300"
+                      ? "bg-amber-600/30 border border-amber-500/50 text-amber-300"
                       : "bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white"
                   }`}
                 >
                   All Categories
                 </button>
-                {narzednikCategories.map((category) => (
+                {celownikCategories.map((category) => (
                   <button
                     key={category}
                     onClick={() => handleCategoryChange(category)}
                     className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                       selectedCategory === category
-                        ? "bg-orange-600/30 border border-orange-500/50 text-orange-300"
+                        ? "bg-amber-600/30 border border-amber-500/50 text-amber-300"
                         : "bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white"
                     }`}
                   >
@@ -223,7 +223,7 @@ export default function NarzednikPractice() {
               isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
             }`}
           >
-            <NarzednikCard
+            <CelownikCard
               currentQuestion={currentQuestion}
               onAnswerChange={handleAnswerChange}
               onCheckAnswer={checkAnswer}
