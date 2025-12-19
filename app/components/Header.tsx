@@ -12,13 +12,15 @@ export default function Header() {
           <Link href="/" className="flex items-center gap-3 group">
             {/* Logo/Icon */}
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center shadow-lg shadow-red-500/20">
-              <span className="text-white font-bold text-lg font-heading">PL</span>
+              <span className="text-white font-bold text-lg font-heading">
+                PL
+              </span>
             </div>
             <div>
               <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight group-hover:text-slate-200 transition-colors font-heading">
                 Nauka Polskiego
               </h1>
-              <p className="text-slate-400 text-xs font-light tracking-wide hidden sm:block">
+              <p className="text-slate-400 text-xs font-light tracking-wide hidden sm:block font-medium">
                 Learn Polish Online
               </p>
             </div>
@@ -37,6 +39,12 @@ export default function Header() {
               className="px-3 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-all"
             >
               Biernik
+            </Link>
+            <Link
+              href="/dopelniacz"
+              className="px-3 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 rounded-lg transition-all"
+            >
+              Dopełniacz
             </Link>
             <Link
               href="/sentences"

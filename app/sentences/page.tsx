@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import Link from "next/link";
 import { type SentenceExercise, type Tense } from "../data/sentences";
 import { verbGroups } from "../data/verbs";
 import BackgroundPattern from "../components/shared/BackgroundPattern";
 import StatsBar from "../components/shared/StatsBar";
+import CasePageHeader from "../components/shared/CasePageHeader";
 import SentenceCard from "../components/sentences/SentenceCard";
 import TipCard from "../components/sentences/TipCard";
 
@@ -179,28 +179,20 @@ export default function SentencePractice() {
 
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* Page Header */}
-        <div className="pb-4 px-4">
+        <CasePageHeader
+          title="Wypełnij lukę"
+          subtitle="Fill in the Blank — Sentence Practice"
+          accentColor="violet"
+          navItems={[
+            { href: "/", label: "← Conjugation" },
+            { href: "/biernik", label: "Biernik" },
+            { href: "/dopelniacz", label: "Dopełniacz" },
+            { href: "/sentences", label: "Sentences", isActive: true },
+          ]}
+        />
+
+        <div className="px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-5xl font-bold text-center bg-gradient-to-r from-white via-slate-200 to-white bg-clip-text text-transparent tracking-tight">
-              Wypełnij lukę
-            </h2>
-            <p className="text-slate-400 text-center mt-2 text-lg tracking-wide">
-              Fill in the Blank — Sentence Practice
-            </p>
-
-            {/* Navigation */}
-            <div className="flex justify-center gap-4 mt-4">
-              <Link
-                href="/"
-                className="px-4 py-2 bg-slate-700/50 hover:bg-slate-700 rounded-xl text-slate-300 hover:text-white transition-all text-sm"
-              >
-                ← Conjugation Practice
-              </Link>
-              <span className="px-4 py-2 bg-red-600/30 border border-red-500/50 rounded-xl text-red-300 text-sm">
-                Sentence Practice
-              </span>
-            </div>
-
             {/* Tense Filter */}
             <div className="flex flex-col items-center gap-2 mt-6">
               <div className="text-slate-400 text-sm uppercase tracking-wider">

@@ -1,27 +1,27 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { type BiernikExercise, biernikCategories } from "../data/biernik";
+import { type DopelniaczExercise, dopelniaczCategories } from "../data/dopelniacz";
 import BackgroundPattern from "../components/shared/BackgroundPattern";
 import StatsBar from "../components/shared/StatsBar";
 import CasePageHeader from "../components/shared/CasePageHeader";
-import BiernikCard from "../components/biernik/BiernikCard";
-import GrammarTipCard from "../components/biernik/GrammarTipCard";
+import DopelniaczCard from "../components/dopelniacz/DopelniaczCard";
+import GrammarTipCard from "../components/dopelniacz/GrammarTipCard";
 
 type QuestionState = {
-  sentence: BiernikExercise;
+  sentence: DopelniaczExercise;
   userAnswer: string;
   isCorrect: boolean | null;
   showAnswer: boolean;
 };
 
-async function fetchBiernikQuestion(
+async function fetchDopelniaczQuestion(
   category: string | null
 ): Promise<QuestionState> {
   const params = new URLSearchParams();
   if (category) params.append("category", category);
 
-  const url = params.toString() ? `/api/biernik?${params}` : "/api/biernik";
+  const url = params.toString() ? `/api/dopelniacz?${params}` : "/api/dopelniacz";
   const res = await fetch(url);
   const sentence = await res.json();
 
@@ -33,7 +33,7 @@ async function fetchBiernikQuestion(
   };
 }
 
-export default function BiernikPractice() {
+export default function DopelniaczPractice() {
   const [currentQuestion, setCurrentQuestion] = useState<QuestionState | null>(
     null
   );
@@ -48,14 +48,14 @@ export default function BiernikPractice() {
   const generateQuestion = useCallback(async () => {
     setShowHint(false);
     setIsAnimating(true);
-    const question = await fetchBiernikQuestion(selectedCategory);
+    const question = await fetchDopelniaczQuestion(selectedCategory);
     setCurrentQuestion(question);
     setTimeout(() => setIsAnimating(false), 500);
     setTimeout(() => inputRef.current?.focus(), 100);
   }, [selectedCategory]);
 
   useEffect(() => {
-    fetchBiernikQuestion(selectedCategory).then((question) => {
+    fetchDopelniaczQuestion(selectedCategory).then((question) => {
       setCurrentQuestion(question);
       inputRef.current?.focus();
     });
@@ -165,13 +165,13 @@ export default function BiernikPractice() {
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* Page Header */}
         <CasePageHeader
-          title="Biernik"
-          subtitle="Accusative Case Practice — Kogo? Co?"
-          accentColor="rose"
+          title="Dopełniacz"
+          subtitle="Genitive Case Practice — Kogo? Czego?"
+          accentColor="amber"
           navItems={[
             { href: "/", label: "← Conjugation" },
-            { href: "/biernik", label: "Biernik Practice", isActive: true },
-            { href: "/dopelniacz", label: "Dopełniacz" },
+            { href: "/biernik", label: "Biernik" },
+            { href: "/dopelniacz", label: "Dopełniacz Practice", isActive: true },
             { href: "/sentences", label: "Sentences →" },
           ]}
         />
@@ -188,19 +188,19 @@ export default function BiernikPractice() {
                   onClick={() => handleCategoryChange(null)}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                     selectedCategory === null
-                      ? "bg-rose-600/30 border border-rose-500/50 text-rose-300"
+                      ? "bg-amber-600/30 border border-amber-500/50 text-amber-300"
                       : "bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white"
                   }`}
                 >
                   All Categories
                 </button>
-                {biernikCategories.map((category) => (
+                {dopelniaczCategories.map((category) => (
                   <button
                     key={category}
                     onClick={() => handleCategoryChange(category)}
                     className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                       selectedCategory === category
-                        ? "bg-rose-600/30 border border-rose-500/50 text-rose-300"
+                        ? "bg-amber-600/30 border border-amber-500/50 text-amber-300"
                         : "bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white"
                     }`}
                   >
@@ -221,7 +221,7 @@ export default function BiernikPractice() {
               isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
             }`}
           >
-            <BiernikCard
+            <DopelniaczCard
               currentQuestion={currentQuestion}
               onAnswerChange={handleAnswerChange}
               onCheckAnswer={checkAnswer}
@@ -239,3 +239,4 @@ export default function BiernikPractice() {
     </div>
   );
 }
+
