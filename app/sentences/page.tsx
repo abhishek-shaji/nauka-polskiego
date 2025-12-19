@@ -189,6 +189,7 @@ export default function SentencePractice() {
             { href: "/dopelniacz", label: "Dopełniacz" },
             { href: "/celownik", label: "Celownik" },
             { href: "/narzednik", label: "Narzędnik" },
+            { href: "/miejscownik", label: "Miejscownik" },
             { href: "/sentences", label: "Sentences", isActive: true },
           ]}
         />

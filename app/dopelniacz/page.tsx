@@ -174,6 +174,7 @@ export default function DopelniaczPractice() {
             { href: "/dopelniacz", label: "Dopełniacz", isActive: true },
             { href: "/celownik", label: "Celownik" },
             { href: "/narzednik", label: "Narzędnik" },
+            { href: "/miejscownik", label: "Miejscownik" },
             { href: "/sentences", label: "Sentences →" },
           ]}
         />

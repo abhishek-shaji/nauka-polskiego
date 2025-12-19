@@ -1,27 +1,27 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { type BiernikExercise, biernikCategories } from "../data/biernik";
+import { type MiejscownikExercise, miejscownikCategories } from "../data/miejscownik";
 import BackgroundPattern from "../components/shared/BackgroundPattern";
 import StatsBar from "../components/shared/StatsBar";
 import CasePageHeader from "../components/shared/CasePageHeader";
-import BiernikCard from "../components/biernik/BiernikCard";
-import GrammarTipCard from "../components/biernik/GrammarTipCard";
+import MiejscownikCard from "../components/miejscownik/MiejscownikCard";
+import GrammarTipCard from "../components/miejscownik/GrammarTipCard";
 
 type QuestionState = {
-  sentence: BiernikExercise;
+  sentence: MiejscownikExercise;
   userAnswer: string;
   isCorrect: boolean | null;
   showAnswer: boolean;
 };
 
-async function fetchBiernikQuestion(
+async function fetchMiejscownikQuestion(
   category: string | null
 ): Promise<QuestionState> {
   const params = new URLSearchParams();
   if (category) params.append("category", category);
 
-  const url = params.toString() ? `/api/biernik?${params}` : "/api/biernik";
+  const url = params.toString() ? `/api/miejscownik?${params}` : "/api/miejscownik";
   const res = await fetch(url);
   const sentence = await res.json();
 
@@ -33,7 +33,7 @@ async function fetchBiernikQuestion(
   };
 }
 
-export default function BiernikPractice() {
+export default function MiejscownikPractice() {
   const [currentQuestion, setCurrentQuestion] = useState<QuestionState | null>(
     null
   );
@@ -48,14 +48,14 @@ export default function BiernikPractice() {
   const generateQuestion = useCallback(async () => {
     setShowHint(false);
     setIsAnimating(true);
-    const question = await fetchBiernikQuestion(selectedCategory);
+    const question = await fetchMiejscownikQuestion(selectedCategory);
     setCurrentQuestion(question);
     setTimeout(() => setIsAnimating(false), 500);
     setTimeout(() => inputRef.current?.focus(), 100);
   }, [selectedCategory]);
 
   useEffect(() => {
-    fetchBiernikQuestion(selectedCategory).then((question) => {
+    fetchMiejscownikQuestion(selectedCategory).then((question) => {
       setCurrentQuestion(question);
       inputRef.current?.focus();
     });
@@ -165,16 +165,16 @@ export default function BiernikPractice() {
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* Page Header */}
         <CasePageHeader
-          title="Biernik"
-          subtitle="Accusative Case Practice — Kogo? Co?"
-          accentColor="rose"
+          title="Miejscownik"
+          subtitle="Locative Case Practice — O kim? O czym? Gdzie?"
+          accentColor="teal"
           navItems={[
             { href: "/", label: "← Conjugation" },
-            { href: "/biernik", label: "Biernik", isActive: true },
+            { href: "/biernik", label: "Biernik" },
             { href: "/dopelniacz", label: "Dopełniacz" },
             { href: "/celownik", label: "Celownik" },
             { href: "/narzednik", label: "Narzędnik" },
-            { href: "/miejscownik", label: "Miejscownik" },
+            { href: "/miejscownik", label: "Miejscownik", isActive: true },
             { href: "/sentences", label: "Sentences →" },
           ]}
         />
@@ -191,19 +191,19 @@ export default function BiernikPractice() {
                   onClick={() => handleCategoryChange(null)}
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                     selectedCategory === null
-                      ? "bg-rose-600/30 border border-rose-500/50 text-rose-300"
+                      ? "bg-teal-600/30 border border-teal-500/50 text-teal-300"
                       : "bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white"
                   }`}
                 >
                   All Categories
                 </button>
-                {biernikCategories.map((category) => (
+                {miejscownikCategories.map((category) => (
                   <button
                     key={category}
                     onClick={() => handleCategoryChange(category)}
                     className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                       selectedCategory === category
-                        ? "bg-rose-600/30 border border-rose-500/50 text-rose-300"
+                        ? "bg-teal-600/30 border border-teal-500/50 text-teal-300"
                         : "bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-white"
                     }`}
                   >
@@ -224,7 +224,7 @@ export default function BiernikPractice() {
               isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
             }`}
           >
-            <BiernikCard
+            <MiejscownikCard
               currentQuestion={currentQuestion}
               onAnswerChange={handleAnswerChange}
               onCheckAnswer={checkAnswer}
@@ -242,3 +242,4 @@ export default function BiernikPractice() {
     </div>
   );
 }
+

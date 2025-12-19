@@ -208,6 +208,7 @@ export default function Home() {
             { href: "/dopelniacz", label: "Dopełniacz" },
             { href: "/celownik", label: "Celownik" },
             { href: "/narzednik", label: "Narzędnik" },
+            { href: "/miejscownik", label: "Miejscownik" },
             { href: "/sentences", label: "Sentences →" },
           ]}
         />

@@ -11,7 +11,14 @@ type NavItem = {
 type CasePageHeaderProps = {
   title: string;
   subtitle: string;
-  accentColor: "rose" | "amber" | "emerald" | "violet" | "sky" | "orange";
+  accentColor:
+    | "rose"
+    | "amber"
+    | "emerald"
+    | "violet"
+    | "sky"
+    | "orange"
+    | "teal";
   navItems?: NavItem[];
 };
 
@@ -51,6 +58,12 @@ const colorClasses = {
     activeBg: "bg-orange-600/30",
     activeBorder: "border-orange-500/50",
     activeText: "text-orange-300",
+  },
+  teal: {
+    gradient: "from-teal-300 via-cyan-200 to-teal-300",
+    activeBg: "bg-teal-600/30",
+    activeBorder: "border-teal-500/50",
+    activeText: "text-teal-300",
   },
 };
 
