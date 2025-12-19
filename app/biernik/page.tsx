@@ -170,8 +170,9 @@ export default function BiernikPractice() {
           accentColor="rose"
           navItems={[
             { href: "/", label: "← Conjugation" },
-            { href: "/biernik", label: "Biernik Practice", isActive: true },
+            { href: "/biernik", label: "Biernik", isActive: true },
             { href: "/dopelniacz", label: "Dopełniacz" },
+            { href: "/narzednik", label: "Narzędnik" },
             { href: "/sentences", label: "Sentences →" },
           ]}
         />

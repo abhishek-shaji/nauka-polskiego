@@ -11,7 +11,7 @@ type NavItem = {
 type CasePageHeaderProps = {
   title: string;
   subtitle: string;
-  accentColor: "rose" | "amber" | "emerald" | "violet" | "sky";
+  accentColor: "rose" | "amber" | "emerald" | "violet" | "sky" | "orange";
   navItems?: NavItem[];
 };
 
@@ -46,12 +46,19 @@ const colorClasses = {
     activeBorder: "border-sky-500/50",
     activeText: "text-sky-300",
   },
+  orange: {
+    gradient: "from-orange-300 via-amber-200 to-orange-300",
+    activeBg: "bg-orange-600/30",
+    activeBorder: "border-orange-500/50",
+    activeText: "text-orange-300",
+  },
 };
 
 const defaultNavItems: NavItem[] = [
   { href: "/", label: "← Conjugation" },
   { href: "/biernik", label: "Biernik" },
   { href: "/dopelniacz", label: "Dopełniacz" },
+  { href: "/narzednik", label: "Narzędnik" },
   { href: "/sentences", label: "Sentences →" },
 ];
 
@@ -100,4 +107,3 @@ export default function CasePageHeader({
     </div>
   );
 }
-

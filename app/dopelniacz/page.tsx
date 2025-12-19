@@ -171,7 +171,8 @@ export default function DopelniaczPractice() {
           navItems={[
             { href: "/", label: "← Conjugation" },
             { href: "/biernik", label: "Biernik" },
-            { href: "/dopelniacz", label: "Dopełniacz Practice", isActive: true },
+            { href: "/dopelniacz", label: "Dopełniacz", isActive: true },
+            { href: "/narzednik", label: "Narzędnik" },
             { href: "/sentences", label: "Sentences →" },
           ]}
         />

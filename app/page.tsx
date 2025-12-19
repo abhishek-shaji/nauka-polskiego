@@ -206,6 +206,7 @@ export default function Home() {
             { href: "/", label: "Conjugation", isActive: true },
             { href: "/biernik", label: "Biernik" },
             { href: "/dopelniacz", label: "Dopełniacz" },
+            { href: "/narzednik", label: "Narzędnik" },
             { href: "/sentences", label: "Sentences →" },
           ]}
         />
