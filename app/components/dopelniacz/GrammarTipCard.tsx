@@ -75,27 +75,39 @@ export default function GrammarTipCard() {
       </div>
 
       {/* Adjective endings */}
-      <div className="mt-4 p-4 bg-slate-900/50 rounded-xl border border-slate-700/50">
-        <h4 className="text-white font-medium mb-3 text-sm uppercase tracking-wider">
+      <div className="mt-4 p-4 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 rounded-xl border border-amber-500/20">
+        <h4 className="text-white font-medium mb-3 text-sm uppercase tracking-wider flex items-center gap-2">
+          <span className="text-amber-400">✨</span>
           Adjective Endings (Przymiotnik)
         </h4>
-        <div className="grid grid-cols-3 gap-3 text-sm">
-          <div className="text-center">
-            <div className="text-slate-400 text-xs mb-1">Masculine/Neuter</div>
-            <div className="text-amber-400 font-medium">-ego</div>
-            <div className="text-slate-500 text-xs mt-1">now<span className="text-amber-400">ego</span></div>
-            <div className="text-slate-500 text-xs">(k,g) polsk<span className="text-amber-400">iego</span></div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+          <div className="text-center bg-slate-800/50 rounded-lg p-3">
+            <div className="text-blue-400 text-xs mb-1">Masc/Neut (hard)</div>
+            <div className="text-amber-400 font-bold text-lg">-ego</div>
+            <div className="text-slate-500 text-xs mt-2">nowy → now<span className="text-amber-400">ego</span></div>
+            <div className="text-slate-500 text-xs">stary → star<span className="text-amber-400">ego</span></div>
           </div>
-          <div className="text-center">
-            <div className="text-slate-400 text-xs mb-1">Feminine</div>
-            <div className="text-pink-400 font-medium">-ej</div>
-            <div className="text-slate-500 text-xs mt-1">now<span className="text-pink-400">ej</span></div>
-            <div className="text-slate-500 text-xs">(k,g) polsk<span className="text-pink-400">iej</span></div>
+          <div className="text-center bg-slate-800/50 rounded-lg p-3">
+            <div className="text-cyan-400 text-xs mb-1">Masc/Neut (k, g)</div>
+            <div className="text-amber-400 font-bold text-lg">-iego</div>
+            <div className="text-slate-500 text-xs mt-2">polski → polsk<span className="text-amber-400">iego</span></div>
+            <div className="text-slate-500 text-xs">drogi → drog<span className="text-amber-400">iego</span></div>
           </div>
-          <div className="text-center">
-            <div className="text-slate-400 text-xs mb-1">Question</div>
-            <div className="text-slate-300 font-medium">Jakiego? Jakiej?</div>
+          <div className="text-center bg-slate-800/50 rounded-lg p-3">
+            <div className="text-pink-400 text-xs mb-1">Feminine (hard)</div>
+            <div className="text-pink-400 font-bold text-lg">-ej</div>
+            <div className="text-slate-500 text-xs mt-2">nowa → now<span className="text-pink-400">ej</span></div>
+            <div className="text-slate-500 text-xs">stara → star<span className="text-pink-400">ej</span></div>
           </div>
+          <div className="text-center bg-slate-800/50 rounded-lg p-3">
+            <div className="text-violet-400 text-xs mb-1">Feminine (k, g)</div>
+            <div className="text-pink-400 font-bold text-lg">-iej</div>
+            <div className="text-slate-500 text-xs mt-2">polska → polsk<span className="text-pink-400">iej</span></div>
+            <div className="text-slate-500 text-xs">droga → drog<span className="text-pink-400">iej</span></div>
+          </div>
+        </div>
+        <div className="mt-3 text-center text-xs text-slate-500">
+          Question: <span className="text-amber-400 font-medium">Jakiego?</span> (masc/neut) • <span className="text-pink-400 font-medium">Jakiej?</span> (fem)
         </div>
       </div>
 
