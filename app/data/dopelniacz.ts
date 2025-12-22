@@ -10,7 +10,7 @@ export type Gender =
 
 export type DopelniaczExercise = {
   sentence: string; // Sentence with ___ for blank
-  nominative: string; // Base form of the noun (shown to user)
+  nominative: string; // Base form of the noun/adjective (shown to user)
   answer: string; // Correct genitive form
   gender: Gender;
   translation: string; // English translation
@@ -49,9 +49,10 @@ export const genderLabels: Record<Gender, { polish: string; english: string }> =
 // Genitive rules for hints
 export const genitiveRules: Record<Gender, string> = {
   masculine_animate:
-    "Masculine animate: -a (like biernik), -y/-i for soft stems",
-  masculine_inanimate: "Masculine inanimate: -a or -u",
-  feminine: "Feminine: -y (hard), -i (k, g, soft consonants)",
+    "Masculine animate: -a (often like biernik), sometimes -y/-i for stems; masc. nouns in -a → -y/-i",
+  masculine_inanimate:
+    "Masculine inanimate: -a or -u (lexical; many places/abstracts → -u)",
+  feminine: "Feminine: -y (hard), -i (k, g, soft consonants); -a → -y/-i",
   neuter: "Neuter: -a (most), stays same for -um words",
 };
 
@@ -68,7 +69,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I'm going to the shop.",
     category: "Movement & Places",
-    hint: "Abstract/location nouns often take -u",
+    hint: "Many place/abstract nouns take -u (but not always).",
   },
   {
     sentence: "Idę do ___.",
@@ -83,9 +84,9 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     nominative: "Kraków",
     answer: "Krakowa",
     gender: "masculine_inanimate",
-    translation: "We're going to Krakow.",
+    translation: "We're going to Kraków.",
     category: "Movement & Places",
-    hint: "City names usually take -a",
+    hint: "Many city names take -a.",
   },
   {
     sentence: "Wracam do ___.",
@@ -176,6 +177,67 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     category: "Movement & Places",
   },
 
+  // Added (more places, more variety)
+  {
+    sentence: "Idę do ___.",
+    nominative: "teatr",
+    answer: "teatru",
+    gender: "masculine_inanimate",
+    translation: "I'm going to the theater.",
+    category: "Movement & Places",
+  },
+  {
+    sentence: "Jadę do ___.",
+    nominative: "szpital",
+    answer: "szpitala",
+    gender: "masculine_inanimate",
+    translation: "I'm going to the hospital.",
+    category: "Movement & Places",
+    hint: "Some buildings/institutions take -a (szpitala, urzędu is different!).",
+  },
+  {
+    sentence: "Idę do ___.",
+    nominative: "urząd",
+    answer: "urzędu",
+    gender: "masculine_inanimate",
+    translation: "I'm going to the office (authority).",
+    category: "Movement & Places",
+    hint: "Common: urząd → urzędu.",
+  },
+  {
+    sentence: "Wpadam do ___.",
+    nominative: "kiosk",
+    answer: "kiosku",
+    gender: "masculine_inanimate",
+    translation: "I'm popping into the kiosk.",
+    category: "Movement & Places",
+  },
+  {
+    sentence: "Idziemy do ___.",
+    nominative: "ogród",
+    answer: "ogrodu",
+    gender: "masculine_inanimate",
+    translation: "We're going to the garden.",
+    category: "Movement & Places",
+  },
+  {
+    sentence: "Wracam do ___.",
+    nominative: "pokój",
+    answer: "pokoju",
+    gender: "masculine_inanimate",
+    translation: "I'm going back to the room.",
+    category: "Movement & Places",
+  },
+  {
+    sentence: "Idę do ___.",
+    nominative: "dworzec",
+    answer: "dworca",
+    gender: "masculine_inanimate",
+    translation: "I'm going to the station.",
+    category: "Movement & Places",
+    hint: "dworzec → dworca.",
+  },
+
   // Feminine places (-y/-i)
   {
     sentence: "Idę do ___.",
@@ -200,7 +262,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm going to the pharmacy.",
     category: "Movement & Places",
-    hint: "After k, g → -i",
+    hint: "After k, g → -i.",
   },
   {
     sentence: "Idziemy do ___.",
@@ -225,7 +287,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm going to the restaurant.",
     category: "Movement & Places",
-    hint: "Soft consonant → -i",
+    hint: "Soft consonant → -i (restauracja → restauracji).",
   },
   {
     sentence: "Idę do ___.",
@@ -284,6 +346,41 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     category: "Movement & Places",
   },
 
+  // Added (feminine places)
+  {
+    sentence: "Idę do ___.",
+    nominative: "poczta",
+    answer: "poczty",
+    gender: "feminine",
+    translation: "I'm going to the post office.",
+    category: "Movement & Places",
+  },
+  {
+    sentence: "Jadę do ___.",
+    nominative: "ambasada",
+    answer: "ambasady",
+    gender: "feminine",
+    translation: "I'm going to the embassy.",
+    category: "Movement & Places",
+  },
+  {
+    sentence: "Idę do ___.",
+    nominative: "ulica",
+    answer: "ulicy",
+    gender: "feminine",
+    translation: "I'm going to the street.",
+    category: "Movement & Places",
+  },
+  {
+    sentence: "Wchodzę do ___.",
+    nominative: "sala",
+    answer: "sali",
+    gender: "feminine",
+    translation: "I'm entering the hall/room.",
+    category: "Movement & Places",
+    hint: "sala → sali (soft ending).",
+  },
+
   // Neuter places (-a, -um stays same)
   {
     sentence: "Idę do ___.",
@@ -300,7 +397,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "neuter",
     translation: "Maybe we'll go to the museum?",
     category: "Movement & Places",
-    hint: "Words ending in -um stay the same",
+    hint: "Words ending in -um stay the same.",
   },
   {
     sentence: "Idę do ___.",
@@ -323,7 +420,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     nominative: "miasto",
     answer: "miasta",
     gender: "neuter",
-    translation: "I'm going to the airport to the city.",
+    translation: "I'm going to the airport in the city.",
     category: "Movement & Places",
   },
   {
@@ -339,7 +436,33 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     nominative: "gimnazjum",
     answer: "gimnazjum",
     gender: "neuter",
-    translation: "I'm going to the gymnasium.",
+    translation: "I'm going to the gymnasium (middle school).",
+    category: "Movement & Places",
+  },
+
+  // Added (neuter places)
+  {
+    sentence: "Idę do ___.",
+    nominative: "jezioro",
+    answer: "jeziora",
+    gender: "neuter",
+    translation: "I'm going to the lake.",
+    category: "Movement & Places",
+  },
+  {
+    sentence: "Idziemy do ___.",
+    nominative: "morze",
+    answer: "morza",
+    gender: "neuter",
+    translation: "We're going to the sea.",
+    category: "Movement & Places",
+  },
+  {
+    sentence: "Wchodzę do ___.",
+    nominative: "wejście",
+    answer: "wejścia",
+    gender: "neuter",
+    translation: "I'm going to the entrance.",
     category: "Movement & Places",
   },
 
@@ -353,7 +476,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     nominative: "kuzyn",
     answer: "kuzyna",
     gender: "masculine_animate",
-    translation: "I'm going to my cousin's.",
+    translation: "I'm going to my cousin's place.",
     category: "People & Family",
   },
   {
@@ -363,7 +486,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "I'm going to the dentist.",
     category: "People & Family",
-    hint: "Masculine nouns ending in -a take -y",
+    hint: "Masculine nouns ending in -a take -y/-i (dentysta → dentysty).",
   },
   {
     sentence: "Idę do ___.",
@@ -394,9 +517,9 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     nominative: "kolega",
     answer: "kolegi",
     gender: "masculine_animate",
-    translation: "I'm going to my colleague's.",
+    translation: "I'm going to my colleague's place.",
     category: "People & Family",
-    hint: "After k, g → -i",
+    hint: "After k, g → -i (kolega → kolegi).",
   },
   {
     sentence: "To jest dom ___.",
@@ -419,7 +542,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     nominative: "poeta",
     answer: "poety",
     gender: "masculine_animate",
-    translation: "I'm going to the poet's.",
+    translation: "I'm going to the poet's place.",
     category: "People & Family",
   },
   {
@@ -455,15 +578,57 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     category: "People & Family",
   },
 
+  // Added (masculine animate)
+  {
+    sentence: "Nie widzę ___.",
+    nominative: "kolega",
+    answer: "kolegi",
+    gender: "masculine_animate",
+    translation: "I don't see my colleague.",
+    category: "People & Family",
+  },
+  {
+    sentence: "Nie ma ___.",
+    nominative: "szef",
+    answer: "szefa",
+    gender: "masculine_animate",
+    translation: "The boss isn't here.",
+    category: "People & Family",
+  },
+  {
+    sentence: "Szukam ___.",
+    nominative: "sąsiad",
+    answer: "sąsiada",
+    gender: "masculine_animate",
+    translation: "I'm looking for the neighbor.",
+    category: "People & Family",
+  },
+  {
+    sentence: "Potrzebuję numeru ___.",
+    nominative: "mechanik",
+    answer: "mechanika",
+    gender: "masculine_animate",
+    translation: "I need the mechanic's number.",
+    category: "People & Family",
+  },
+  {
+    sentence: "To jest zdjęcie ___.",
+    nominative: "dziadek",
+    answer: "dziadka",
+    gender: "masculine_animate",
+    translation: "This is grandfather's photo.",
+    category: "People & Family",
+  },
+
   // Feminine people (-y/-i)
   {
     sentence: "Idę do ___.",
     nominative: "babcia",
     answer: "babci",
     gender: "feminine",
-    translation: "I'm going to grandmother's.",
+    translation: "I'm going to grandmother's place.",
     category: "People & Family",
-    hint: "Soft consonant → -i",
+    hint: "babcia → babci (soft ending).",
   },
   {
     sentence: "To jest dom ___.",
@@ -494,7 +659,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     nominative: "ciocia",
     answer: "cioci",
     gender: "feminine",
-    translation: "I'm going to my aunt's.",
+    translation: "I'm going to my aunt's place.",
     category: "People & Family",
   },
   {
@@ -510,7 +675,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     nominative: "przyjaciółka",
     answer: "przyjaciółki",
     gender: "feminine",
-    translation: "I'm looking for my friend.",
+    translation: "I'm looking for my (female) friend.",
     category: "People & Family",
   },
   {
@@ -526,7 +691,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     nominative: "matka",
     answer: "matki",
     gender: "feminine",
-    translation: "I'm going to my mother's.",
+    translation: "I'm going to my mother's place.",
     category: "People & Family",
   },
   {
@@ -535,6 +700,33 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     answer: "żony",
     gender: "feminine",
     translation: "This is my wife's car.",
+    category: "People & Family",
+  },
+
+  // Added (feminine people)
+  {
+    sentence: "Nie ma ___.",
+    nominative: "pani",
+    answer: "pani",
+    gender: "feminine",
+    translation: "The lady isn't here.",
+    category: "People & Family",
+    hint: "pani is usually indeclinable (genitive: pani).",
+  },
+  {
+    sentence: "Szukam ___.",
+    nominative: "dziewczyna",
+    answer: "dziewczyny",
+    gender: "feminine",
+    translation: "I'm looking for the girl.",
+    category: "People & Family",
+  },
+  {
+    sentence: "To jest głos ___.",
+    nominative: "asystentka",
+    answer: "asystentki",
+    gender: "feminine",
+    translation: "This is the assistant's voice.",
     category: "People & Family",
   },
 
@@ -547,12 +739,19 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     translation: "This is the child's toy.",
     category: "People & Family",
   },
+  {
+    sentence: "Nie ma ___.",
+    nominative: "dziecko",
+    answer: "dziecka",
+    gender: "neuter",
+    translation: "There is no child here.",
+    category: "People & Family",
+  },
 
   // ============================================
   // FOOD & DRINKS (using bez, szklanka, etc.)
   // ============================================
 
-  // Feminine (-y/-i)
   {
     sentence: "Poproszę kawę bez ___.",
     nominative: "cukier",
@@ -766,6 +965,66 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     category: "Food & Drinks",
   },
 
+  // Added (food variety + “brakuje/bez/trochę” style genitives)
+  {
+    sentence: "Brakuje mi ___.",
+    nominative: "kawa",
+    answer: "kawy",
+    gender: "feminine",
+    translation: "I'm out of coffee / I'm missing coffee.",
+    category: "Food & Drinks",
+    hint: "brakować + D. (genitive).",
+  },
+  {
+    sentence: "Nie ma ___.",
+    nominative: "chleb",
+    answer: "chleba",
+    gender: "masculine_inanimate",
+    translation: "There is no bread.",
+    category: "Food & Drinks",
+  },
+  {
+    sentence: "Dodaj trochę ___.",
+    nominative: "mleko",
+    answer: "mleka",
+    gender: "neuter",
+    translation: "Add a bit of milk.",
+    category: "Food & Drinks",
+  },
+  {
+    sentence: "Poproszę bez ___.",
+    nominative: "cebula",
+    answer: "cebuli",
+    gender: "feminine",
+    translation: "Without onion, please.",
+    category: "Food & Drinks",
+  },
+  {
+    sentence: "Potrzebuję trochę ___.",
+    nominative: "sól",
+    answer: "soli",
+    gender: "feminine",
+    translation: "I need a bit of salt.",
+    category: "Food & Drinks",
+    hint: "sól → soli.",
+  },
+  {
+    sentence: "Kawa bez ___.",
+    nominative: "mleko",
+    answer: "mleka",
+    gender: "neuter",
+    translation: "Coffee without milk.",
+    category: "Food & Drinks",
+  },
+  {
+    sentence: "Smak ___ jest niesamowity.",
+    nominative: "czekolada",
+    answer: "czekolady",
+    gender: "feminine",
+    translation: "The taste of chocolate is amazing.",
+    category: "Food & Drinks",
+  },
+
   // ============================================
   // OBJECTS (possession, "bez" without)
   // ============================================
@@ -968,6 +1227,49 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     category: "Objects",
   },
 
+  // Added (objects, more “of/without/lack”)
+  {
+    sentence: "Brakuje mi ___.",
+    nominative: "ładowarka",
+    answer: "ładowarki",
+    gender: "feminine",
+    translation: "I'm missing a charger.",
+    category: "Objects",
+  },
+  {
+    sentence: "Nie ma ___.",
+    nominative: "pilot",
+    answer: "pilota",
+    gender: "masculine_inanimate",
+    translation: "There is no remote control.",
+    category: "Objects",
+  },
+  {
+    sentence: "Potrzebuję hasła do ___.",
+    nominative: "wi-fi",
+    answer: "wi-fi",
+    gender: "masculine_inanimate",
+    translation: "I need the password for the Wi-Fi.",
+    category: "Objects",
+    hint: "Borrowings like Wi-Fi are often indeclinable in practice.",
+  },
+  {
+    sentence: "To jest okładka ___.",
+    nominative: "zeszyt",
+    answer: "zeszytu",
+    gender: "masculine_inanimate",
+    translation: "This is the cover of the notebook.",
+    category: "Objects",
+  },
+  {
+    sentence: "Nie mam dostępu do ___.",
+    nominative: "konto",
+    answer: "konta",
+    gender: "neuter",
+    translation: "I don't have access to the account.",
+    category: "Objects",
+  },
+
   // ============================================
   // TIME & DATES
   // ============================================
@@ -1160,6 +1462,49 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     category: "Time & Dates",
   },
 
+  // Added (time variety)
+  {
+    sentence: "Do ___.",
+    nominative: "jutro",
+    answer: "jutra",
+    gender: "neuter",
+    translation: "Until tomorrow.",
+    category: "Time & Dates",
+  },
+  {
+    sentence: "Do ___.",
+    nominative: "wieczór",
+    answer: "wieczoru",
+    gender: "masculine_inanimate",
+    translation: "Until the evening.",
+    category: "Time & Dates",
+  },
+  {
+    sentence: "Od ___.",
+    nominative: "rana",
+    answer: "rana",
+    gender: "masculine_inanimate",
+    translation: "Since morning (from the early morning).",
+    category: "Time & Dates",
+    hint: "Fixed phrase: od rana (common, idiomatic).",
+  },
+  {
+    sentence: "Do ___.",
+    nominative: "wiosna",
+    answer: "wiosny",
+    gender: "feminine",
+    translation: "Until spring.",
+    category: "Time & Dates",
+  },
+  {
+    sentence: "Nie mam ___.",
+    nominative: "chwila",
+    answer: "chwili",
+    gender: "feminine",
+    translation: "I don't have a moment.",
+    category: "Time & Dates",
+  },
+
   // ============================================
   // POSSESSION (czyj? czyja? czyje?)
   // ============================================
@@ -1188,7 +1533,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "I see dad's car.",
     category: "Possession",
-    hint: "Masculine nouns ending in -a take -y",
+    hint: "Masculine nouns ending in -a take -y/-i (tata → taty).",
   },
   {
     sentence: "To jest gabinet ___.",
@@ -1249,6 +1594,32 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     category: "Possession",
   },
 
+  // Added (possession variety)
+  {
+    sentence: "To jest numer telefonu ___.",
+    nominative: "kurier",
+    answer: "kuriera",
+    gender: "masculine_animate",
+    translation: "This is the courier's phone number.",
+    category: "Possession",
+  },
+  {
+    sentence: "To jest klucz do mieszkania ___.",
+    nominative: "sąsiad",
+    answer: "sąsiada",
+    gender: "masculine_animate",
+    translation: "This is the key to the neighbor's apartment.",
+    category: "Possession",
+  },
+  {
+    sentence: "To jest zdjęcie ___.",
+    nominative: "córka",
+    answer: "córki",
+    gender: "feminine",
+    translation: "This is my daughter's photo.",
+    category: "Possession",
+  },
+
   // ============================================
   // ADJECTIVES (-ego, -iego, -ej, -iej)
   // ============================================
@@ -1259,9 +1630,9 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     nominative: "mój",
     answer: "mojego",
     gender: "masculine_animate",
-    translation: "I'm going to my cousin's.",
+    translation: "I'm going to my cousin's place.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive (hard stems)",
+    hint: "-ego for masculine/neuter genitive (hard stems).",
   },
   {
     sentence: "Idę do ___ klubu.",
@@ -1270,7 +1641,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I'm going to the new club.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "Idę do ___ kina.",
@@ -1279,7 +1650,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "neuter",
     translation: "I'm going to the new cinema.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "To jest dom ___ sąsiada.",
@@ -1288,7 +1659,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "This is the old neighbor's house.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "Szukam ___ telefonu.",
@@ -1297,7 +1668,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I'm looking for my phone.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "To jest samochód ___ brata.",
@@ -1306,7 +1677,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "This is your brother's car.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "Nie mam ___ komputera.",
@@ -1315,7 +1686,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I don't have a good computer.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "Potrzebuję ___ samochodu.",
@@ -1324,7 +1695,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I need a new car.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "Idę do ___ sklepu.",
@@ -1333,7 +1704,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I'm going to the big store.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "Szukam ___ mieszkania.",
@@ -1342,7 +1713,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "neuter",
     translation: "I'm looking for a small apartment.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "To jest biuro ___ dyrektora.",
@@ -1351,7 +1722,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "This is our director's office.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "Wchodzę do ___ pokoju.",
@@ -1360,7 +1731,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I'm entering the dark room.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "Idę do ___ miasta.",
@@ -1369,7 +1740,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "neuter",
     translation: "I'm going to the old city.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "To jest samochód ___ kolegi.",
@@ -1378,7 +1749,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "This is the young colleague's car.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "Szukam ___ biurka.",
@@ -1387,7 +1758,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "neuter",
     translation: "I'm looking for a white desk.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "Nie mam ___ czasu.",
@@ -1396,7 +1767,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I don't have free time.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "To jest telefon ___ studenta.",
@@ -1405,7 +1776,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "This is the talented student's phone.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "Idę do ___ parku.",
@@ -1414,7 +1785,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I'm going to the beautiful park.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "Szukam ___ zdjęcia.",
@@ -1423,7 +1794,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "neuter",
     translation: "I'm looking for an old photo.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
   {
     sentence: "To jest dom ___ przyjaciela.",
@@ -1432,7 +1803,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "This is my best friend's house.",
     category: "Adjectives",
-    hint: "-ego for masculine/neuter genitive",
+    hint: "-ego for masculine/neuter genitive.",
   },
 
   // -IEGO endings (masculine/neuter soft stems, after k/g)
@@ -1443,7 +1814,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "I'm going to the Polish doctor.",
     category: "Adjectives",
-    hint: "-iego after soft consonants (k, g)",
+    hint: "Often -ego here; spelling/pronunciation changes in some patterns.",
   },
   {
     sentence: "Idę do ___ hotelu.",
@@ -1452,7 +1823,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I'm going to the expensive hotel.",
     category: "Adjectives",
-    hint: "-iego after soft consonants (k, g)",
   },
   {
     sentence: "To jest gabinet ___ dyrektora.",
@@ -1461,7 +1831,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "This is the tall director's office.",
     category: "Adjectives",
-    hint: "-iego after soft consonants (k, g)",
   },
   {
     sentence: "Szukam ___ budynku.",
@@ -1470,7 +1839,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I'm looking for the big building.",
     category: "Adjectives",
-    hint: "-iego after soft consonants (k, g)",
   },
   {
     sentence: "Nie mam ___ słownika.",
@@ -1479,7 +1847,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I don't have an English dictionary.",
     category: "Adjectives",
-    hint: "-iego after soft consonants (k, g)",
   },
   {
     sentence: "To jest dom ___ nauczyciela.",
@@ -1488,7 +1855,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "This is the German teacher's house.",
     category: "Adjectives",
-    hint: "-iego after soft consonants (k, g)",
   },
   {
     sentence: "Idę do ___ sklepu.",
@@ -1497,7 +1863,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I'm going to the cheap store.",
     category: "Adjectives",
-    hint: "-iego after soft consonants",
   },
   {
     sentence: "Szukam ___ kina.",
@@ -1506,7 +1871,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "neuter",
     translation: "I'm looking for a nearby cinema.",
     category: "Adjectives",
-    hint: "-iego after soft consonants (k, g)",
   },
   {
     sentence: "To jest biurko ___ szefa.",
@@ -1515,7 +1879,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "This is the short boss's desk.",
     category: "Adjectives",
-    hint: "-iego after soft consonants (k, g)",
   },
   {
     sentence: "Idę do ___ teatru.",
@@ -1524,7 +1887,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I'm going to the distant theater.",
     category: "Adjectives",
-    hint: "-iego after soft consonants (k, g)",
   },
   {
     sentence: "Nie mam ___ paszportu.",
@@ -1533,7 +1895,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I don't have a valid passport.",
     category: "Adjectives",
-    hint: "-ego for masculine genitive",
+    hint: "ważny → ważnego (regular -ego).",
   },
   {
     sentence: "To jest samochód ___ kolegi.",
@@ -1542,7 +1904,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "This is my close friend's car.",
     category: "Adjectives",
-    hint: "-iego after soft consonants (k, g)",
   },
   {
     sentence: "Szukam ___ zegarka.",
@@ -1551,7 +1912,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I'm looking for an expensive watch.",
     category: "Adjectives",
-    hint: "-iego after soft consonants (k, g)",
   },
   {
     sentence: "Idę do ___ lekarza.",
@@ -1560,7 +1920,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "I'm going to the good doctor.",
     category: "Adjectives",
-    hint: "-ego for masculine genitive",
   },
   {
     sentence: "To jest mieszkanie ___ artysty.",
@@ -1569,10 +1928,9 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "This is the famous artist's apartment.",
     category: "Adjectives",
-    hint: "-ego for masculine genitive",
   },
 
-  // -EJ endings (feminine hard stems)
+  // -EJ endings (feminine)
   {
     sentence: "Idę do ___ dyskoteki.",
     nominative: "nowa",
@@ -1580,7 +1938,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm going to the new disco.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive (hard stems)",
+    hint: "-ej for feminine genitive.",
   },
   {
     sentence: "To jest torba ___ koleżanki.",
@@ -1589,7 +1947,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "This is my female friend's bag.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Szukam ___ książki.",
@@ -1598,7 +1955,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm looking for your book.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Idę do ___ restauracji.",
@@ -1607,7 +1963,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm going to the good restaurant.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "To jest dom ___ babci.",
@@ -1616,7 +1971,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "This is our grandmother's house.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Nie mam ___ kawy.",
@@ -1625,7 +1979,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I don't have hot coffee.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Szukam ___ lampy.",
@@ -1634,7 +1987,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm looking for the old lamp.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Idę do ___ kawiarni.",
@@ -1643,7 +1995,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm going to the small café.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "To jest telefon ___ siostry.",
@@ -1652,7 +2003,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "This is the young sister's phone.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Nie mam ___ wody.",
@@ -1661,7 +2011,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I don't have cold water.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Szukam ___ sukienki.",
@@ -1670,16 +2019,14 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm looking for a black dress.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Idę do ___ apteki.",
-    nominative: "blisko",
+    nominative: "bliska",
     answer: "bliskiej",
     gender: "feminine",
     translation: "I'm going to the nearby pharmacy.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "To jest samochód ___ córki.",
@@ -1688,7 +2035,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "This is your (pl.) daughter's car.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
+    hint: "wasza → waszej (fem. gen.).",
   },
   {
     sentence: "Potrzebuję ___ herbaty.",
@@ -1697,7 +2044,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I need warm tea.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Szukam ___ gazety.",
@@ -1706,7 +2052,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm looking for today's newspaper.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Idę do ___ biblioteki.",
@@ -1715,7 +2060,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm going to the big library.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "To jest biurko ___ żony.",
@@ -1724,7 +2068,7 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "This is his wife's desk.",
     category: "Adjectives",
-    hint: "'jego' doesn't change in genitive",
+    hint: "'jego' doesn't change (indeclinable pronoun).",
   },
   {
     sentence: "Nie mam ___ kurtki.",
@@ -1733,7 +2077,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I don't have a warm jacket.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Szukam ___ torby.",
@@ -1742,7 +2085,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm looking for a red bag.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "To jest dom ___ nauczycielki.",
@@ -1751,10 +2093,9 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "This is the nice teacher's house.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
 
-  // -IEJ endings (feminine soft stems, after k/g)
+  // -IEJ endings (feminine)
   {
     sentence: "Idę do ___ szkoły.",
     nominative: "polska",
@@ -1762,7 +2103,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm going to a Polish school.",
     category: "Adjectives",
-    hint: "-iej after soft consonants (k, g)",
   },
   {
     sentence: "To jest torba ___ córki.",
@@ -1771,7 +2111,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "This is the tall daughter's bag.",
     category: "Adjectives",
-    hint: "-iej after soft consonants (k, g)",
   },
   {
     sentence: "Szukam ___ apteki.",
@@ -1780,7 +2119,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm looking for an expensive pharmacy.",
     category: "Adjectives",
-    hint: "-iej after soft consonants (k, g)",
   },
   {
     sentence: "Idę do ___ restauracji.",
@@ -1789,7 +2127,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm going to an Italian restaurant.",
     category: "Adjectives",
-    hint: "-iej after soft consonants (k, g)",
   },
   {
     sentence: "To jest dom ___ sąsiadki.",
@@ -1798,7 +2135,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "This is the short neighbor's house.",
     category: "Adjectives",
-    hint: "-iej after soft consonants (k, g)",
   },
   {
     sentence: "Nie mam ___ kawy.",
@@ -1807,7 +2143,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I don't have strong coffee.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Szukam ___ książki.",
@@ -1816,7 +2151,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm looking for an English book.",
     category: "Adjectives",
-    hint: "-iej after soft consonants (k, g)",
   },
   {
     sentence: "Idę do ___ galerii.",
@@ -1825,7 +2159,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm going to the big gallery.",
     category: "Adjectives",
-    hint: "-iej after soft consonants (k, g)",
   },
   {
     sentence: "To jest biurko ___ sekretarki.",
@@ -1834,7 +2167,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "This is the German secretary's desk.",
     category: "Adjectives",
-    hint: "-iej after soft consonants (k, g)",
   },
   {
     sentence: "Nie mam ___ bluzy.",
@@ -1843,7 +2175,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I don't have a heavy sweatshirt.",
     category: "Adjectives",
-    hint: "-iej after soft consonants (k, g)",
   },
   {
     sentence: "Szukam ___ torebki.",
@@ -1852,7 +2183,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm looking for a cheap purse.",
     category: "Adjectives",
-    hint: "-iej after soft consonants",
   },
   {
     sentence: "Idę do ___ kawiarni.",
@@ -1861,7 +2191,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm going to a nearby café.",
     category: "Adjectives",
-    hint: "-iej after soft consonants (k, g)",
   },
   {
     sentence: "To jest samochód ___ koleżanki.",
@@ -1870,7 +2199,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "This is my distant friend's car.",
     category: "Adjectives",
-    hint: "-iej after soft consonants (k, g)",
   },
   {
     sentence: "Nie mam ___ kurtki.",
@@ -1879,7 +2207,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I don't have a light jacket.",
     category: "Adjectives",
-    hint: "-iej after soft consonants (k, g)",
   },
   {
     sentence: "Szukam ___ sukienki.",
@@ -1888,7 +2215,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm looking for a short dress.",
     category: "Adjectives",
-    hint: "-iej after soft consonants (k, g)",
   },
   {
     sentence: "Idę do ___ poczty.",
@@ -1897,7 +2223,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm going to the main post office.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "To jest telefon ___ asystentki.",
@@ -1906,7 +2231,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "This is the Slovak assistant's phone.",
     category: "Adjectives",
-    hint: "-iej after soft consonants (k, g)",
   },
   {
     sentence: "Potrzebuję ___ wody.",
@@ -1915,7 +2239,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I need sparkling water.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Szukam ___ ulicy.",
@@ -1924,7 +2247,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm looking for the main street.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Idę do ___ szkoły.",
@@ -1933,7 +2255,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm going to the middle school.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
 
   // Mixed adjective exercises (all endings)
@@ -1944,7 +2265,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "This is the famous professor's apartment.",
     category: "Adjectives",
-    hint: "-ego for masculine genitive",
   },
   {
     sentence: "Szukam ___ telefonu.",
@@ -1953,7 +2273,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I'm looking for a lost phone.",
     category: "Adjectives",
-    hint: "-ego for masculine genitive",
   },
   {
     sentence: "Idę do ___ sklepu.",
@@ -1962,7 +2281,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I'm going to the open store.",
     category: "Adjectives",
-    hint: "-ego for masculine genitive",
   },
   {
     sentence: "Nie mam ___ parasola.",
@@ -1971,7 +2289,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I don't have a black umbrella.",
     category: "Adjectives",
-    hint: "-ego for masculine genitive",
   },
   {
     sentence: "Szukam ___ restauracji.",
@@ -1980,7 +2297,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm looking for an open restaurant.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "To jest samochód ___ aktora.",
@@ -1989,7 +2305,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "This is the famous actor's car.",
     category: "Adjectives",
-    hint: "-ego for masculine genitive",
   },
   {
     sentence: "Idę do ___ kawiarni.",
@@ -1998,7 +2313,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm going to my favorite café.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
   },
   {
     sentence: "Potrzebuję ___ słownika.",
@@ -2007,7 +2321,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_inanimate",
     translation: "I need an electronic dictionary.",
     category: "Adjectives",
-    hint: "-ego for masculine genitive",
   },
   {
     sentence: "To jest dom ___ piosenkarza.",
@@ -2016,7 +2329,6 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "masculine_animate",
     translation: "This is the popular singer's house.",
     category: "Adjectives",
-    hint: "-ego for masculine genitive",
   },
   {
     sentence: "Szukam ___ gazety.",
@@ -2025,7 +2337,149 @@ export const dopelniaczSentences: DopelniaczExercise[] = [
     gender: "feminine",
     translation: "I'm looking for yesterday's newspaper.",
     category: "Adjectives",
-    hint: "-ej for feminine genitive",
+  },
+
+  // Added (more adjective-heavy, more vivid)
+  {
+    sentence: "Nie mam ___ pomysłu.",
+    nominative: "dobry",
+    answer: "dobrego",
+    gender: "masculine_inanimate",
+    translation: "I don't have a good idea.",
+    category: "Adjectives",
+  },
+  {
+    sentence: "Brakuje mi ___ czasu.",
+    nominative: "wolny",
+    answer: "wolnego",
+    gender: "masculine_inanimate",
+    translation: "I'm lacking free time.",
+    category: "Adjectives",
+  },
+  {
+    sentence: "Szukam ___ rozwiązania.",
+    nominative: "prosty",
+    answer: "prostego",
+    gender: "neuter",
+    translation: "I'm looking for a simple solution.",
+    category: "Adjectives",
+    hint: "rozwiązanie (n.) → rozwiązania; adjective: prostego.",
+  },
+  {
+    sentence: "Nie mam ___ cierpliwości.",
+    nominative: "wielka",
+    answer: "wielkiej",
+    gender: "feminine",
+    translation: "I don't have great patience.",
+    category: "Adjectives",
+  },
+  {
+    sentence: "Potrzebuję ___ odpowiedzi.",
+    nominative: "krótka",
+    answer: "krótkiej",
+    gender: "feminine",
+    translation: "I need a short answer.",
+    category: "Adjectives",
+  },
+  {
+    sentence: "To jest numer ___ pokoju.",
+    nominative: "nasz",
+    answer: "naszego",
+    gender: "masculine_inanimate",
+    translation: "This is the number of our room.",
+    category: "Adjectives",
+  },
+  {
+    sentence: "Nie ma ___ miejsca.",
+    nominative: "wolny",
+    answer: "wolnego",
+    gender: "neuter",
+    translation: "There is no free seat/space.",
+    category: "Adjectives",
+    hint: "miejsce (n.) → miejsca.",
+  },
+  {
+    sentence: "Szukam ___ wejścia.",
+    nominative: "główny",
+    answer: "głównego",
+    gender: "neuter",
+    translation: "I'm looking for the main entrance.",
+    category: "Adjectives",
+  },
+  {
+    sentence: "Nie mam ___ klucza.",
+    nominative: "zapasowy",
+    answer: "zapasowego",
+    gender: "masculine_inanimate",
+    translation: "I don't have a spare key.",
+    category: "Adjectives",
+  },
+  {
+    sentence: "Potrzebuję ___ pomocy.",
+    nominative: "natychmiastowa",
+    answer: "natychmiastowej",
+    gender: "feminine",
+    translation: "I need immediate help.",
+    category: "Adjectives",
+  },
+
+  // ============================================
+  // EXTRA: Mix of non-adjective genitive patterns inside existing categories
+  // (kept in existing categories to avoid breaking your filters)
+  // ============================================
+
+  // People & Family (more “brakuje/nie ma”)
+  {
+    sentence: "Brakuje mi ___.",
+    nominative: "przyjaciel",
+    answer: "przyjaciela",
+    gender: "masculine_animate",
+    translation: "I miss my friend.",
+    category: "People & Family",
+  },
+  {
+    sentence: "Nie ma ___.",
+    nominative: "siostra",
+    answer: "siostry",
+    gender: "feminine",
+    translation: "My sister isn't here.",
+    category: "People & Family",
+  },
+
+  // Objects (a bit more descriptive)
+  {
+    sentence: "Nie mam ___ telefonu.",
+    nominative: "nowy",
+    answer: "nowego",
+    gender: "masculine_inanimate",
+    translation: "I don't have a new phone.",
+    category: "Objects",
+  },
+  {
+    sentence: "Szukam ___ ładowarki.",
+    nominative: "czarny",
+    answer: "czarnej",
+    gender: "feminine",
+    translation: "I'm looking for the black charger.",
+    category: "Objects",
+  },
+
+  // Time & Dates (more common phrases)
+  {
+    sentence: "Do ___.",
+    nominative: "koniec",
+    answer: "końca",
+    gender: "masculine_inanimate",
+    translation: "Until the end.",
+    category: "Time & Dates",
+  },
+  {
+    sentence: "Nie mam ___.",
+    nominative: "plan",
+    answer: "planu",
+    gender: "masculine_inanimate",
+    translation: "I don't have a plan.",
+    category: "Time & Dates",
   },
 ];
 
@@ -2036,6 +2490,7 @@ export function getRandomDopelniaczSentence(
   const filteredSentences = category
     ? dopelniaczSentences.filter((s) => s.category === category)
     : dopelniaczSentences;
+
   return filteredSentences[
     Math.floor(Math.random() * filteredSentences.length)
   ];

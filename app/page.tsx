@@ -8,12 +8,16 @@ import {
   type VerbConjugation,
   type Tense,
   verbGroups,
+  verbs,
 } from "./data/verbs";
 import BackgroundPattern from "./components/shared/BackgroundPattern";
 import StatsBar from "./components/shared/StatsBar";
 import CasePageHeader from "./components/shared/CasePageHeader";
 import QuestionCard from "./components/homepage/QuestionCard";
 import ConjugationTable from "./components/homepage/ConjugationTable";
+import FullTableCard from "./components/homepage/FullTableCard";
+
+type PracticeMode = "single" | "fullTable";
 
 type QuestionState = {
   verb: VerbConjugation;
@@ -44,6 +48,16 @@ async function fetchQuestion(
   };
 }
 
+function getRandomVerb(
+  group: string | null,
+  allVerbs: VerbConjugation[]
+): VerbConjugation {
+  const filteredVerbs = group
+    ? allVerbs.filter((v) => v.group === group)
+    : allVerbs;
+  return filteredVerbs[Math.floor(Math.random() * filteredVerbs.length)];
+}
+
 export default function Home() {
   const [currentQuestion, setCurrentQuestion] = useState<QuestionState | null>(
     null
@@ -55,6 +69,10 @@ export default function Home() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [selectedTense, setSelectedTense] = useState<Tense>("present");
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+  const [practiceMode, setPracticeMode] = useState<PracticeMode>("single");
+  const [fullTableVerb, setFullTableVerb] = useState<VerbConjugation | null>(
+    null
+  );
   const inputRef = useRef<HTMLInputElement>(null);
 
   const generateQuestion = useCallback(async () => {
@@ -66,12 +84,24 @@ export default function Home() {
     setTimeout(() => inputRef.current?.focus(), 100);
   }, [selectedTense, selectedGroup]);
 
+  const generateFullTableVerb = useCallback(() => {
+    setIsAnimating(true);
+    const verb = getRandomVerb(selectedGroup, verbs);
+    setFullTableVerb(verb);
+    setTimeout(() => setIsAnimating(false), 500);
+  }, [selectedGroup]);
+
   useEffect(() => {
-    fetchQuestion(selectedTense, selectedGroup).then((question) => {
-      setCurrentQuestion(question);
-      inputRef.current?.focus();
-    });
-  }, [selectedTense, selectedGroup]);
+    if (practiceMode === "single") {
+      fetchQuestion(selectedTense, selectedGroup).then((question) => {
+        setCurrentQuestion(question);
+        inputRef.current?.focus();
+      });
+    } else {
+      const verb = getRandomVerb(selectedGroup, verbs);
+      setFullTableVerb(verb);
+    }
+  }, [selectedTense, selectedGroup, practiceMode]);
 
   const handleTenseChange = (tense: Tense) => {
     setSelectedTense(tense);
@@ -87,11 +117,42 @@ export default function Home() {
     setStreak(0);
   };
 
+  const handleModeChange = (mode: PracticeMode) => {
+    setPracticeMode(mode);
+    // Reset score when switching modes
+    setScore({ correct: 0, total: 0 });
+    setStreak(0);
+  };
+
+  const handleFullTableComplete = (
+    allCorrect: boolean,
+    correctCount: number,
+    total: number
+  ) => {
+    // Add correctCount to score and total to total attempts
+    setScore((prev) => ({
+      correct: prev.correct + correctCount,
+      total: prev.total + total,
+    }));
+
+    if (allCorrect) {
+      const newStreak = streak + 1;
+      setStreak(newStreak);
+      if (newStreak > maxStreak) {
+        setMaxStreak(newStreak);
+      }
+    } else {
+      setStreak(0);
+    }
+  };
+
   // Track if answer was just checked to prevent the global listener from firing on the same keypress
   const justCheckedAnswer = useRef(false);
 
-  // Global keyboard listener for Enter key when answer has been checked
+  // Global keyboard listener for Enter key when answer has been checked (single mode only)
   useEffect(() => {
+    if (practiceMode !== "single") return;
+
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter" && currentQuestion?.isCorrect !== null) {
         // Skip if we just checked the answer on this same keypress
@@ -105,7 +166,7 @@ export default function Home() {
 
     window.addEventListener("keydown", handleGlobalKeyDown);
     return () => window.removeEventListener("keydown", handleGlobalKeyDown);
-  }, [currentQuestion?.isCorrect, generateQuestion]);
+  }, [currentQuestion?.isCorrect, generateQuestion, practiceMode]);
 
   const normalizeAnswer = (answer: string): string => {
     return answer.toLowerCase().trim();
@@ -181,7 +242,10 @@ export default function Home() {
   };
 
   // Show loading state until client-side hydration is complete
-  if (!currentQuestion) {
+  const isLoading =
+    practiceMode === "single" ? !currentQuestion : !fullTableVerb;
+
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden py-10">
         <BackgroundPattern />
@@ -215,8 +279,32 @@ export default function Home() {
 
         <div className="px-4">
           <div className="max-w-4xl mx-auto">
-            {/* Tense Toggle */}
+            {/* Mode Toggle */}
             <div className="flex justify-center gap-2 mt-6">
+              <button
+                onClick={() => handleModeChange("single")}
+                className={`px-5 py-2 rounded-xl font-medium text-sm transition-all duration-300 ${
+                  practiceMode === "single"
+                    ? "bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-500/30"
+                    : "bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200"
+                }`}
+              >
+                Single Pronoun
+              </button>
+              <button
+                onClick={() => handleModeChange("fullTable")}
+                className={`px-5 py-2 rounded-xl font-medium text-sm transition-all duration-300 ${
+                  practiceMode === "fullTable"
+                    ? "bg-gradient-to-r from-violet-600 to-violet-500 text-white shadow-lg shadow-violet-500/30"
+                    : "bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200"
+                }`}
+              >
+                Full Table
+              </button>
+            </div>
+
+            {/* Tense Toggle */}
+            <div className="flex justify-center gap-2 mt-4">
               <button
                 onClick={() => handleTenseChange("present")}
                 className={`px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${
@@ -282,29 +370,41 @@ export default function Home() {
         {/* Main content */}
         <main className="flex items-center justify-center px-4 py-20">
           <div
-            className={`w-full max-w-2xl transition-all duration-500 ${
-              isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"
-            }`}
+            className={`w-full transition-all duration-500 ${
+              practiceMode === "fullTable" ? "max-w-5xl" : "max-w-2xl"
+            } ${isAnimating ? "opacity-0 scale-95" : "opacity-100 scale-100"}`}
           >
-            <QuestionCard
-              currentQuestion={currentQuestion}
-              onAnswerChange={handleAnswerChange}
-              onCheckAnswer={checkAnswer}
-              onNextQuestion={generateQuestion}
-              onKeyDown={handleKeyDown}
-              showHint={showHint}
-              onToggleHint={() => setShowHint(!showHint)}
-              inputRef={inputRef}
-              tense={currentQuestion.tense}
-            />
+            {practiceMode === "single" && currentQuestion ? (
+              <>
+                <QuestionCard
+                  currentQuestion={currentQuestion}
+                  onAnswerChange={handleAnswerChange}
+                  onCheckAnswer={checkAnswer}
+                  onNextQuestion={generateQuestion}
+                  onKeyDown={handleKeyDown}
+                  showHint={showHint}
+                  onToggleHint={() => setShowHint(!showHint)}
+                  inputRef={inputRef}
+                  tense={currentQuestion.tense}
+                />
 
-            {currentQuestion.isCorrect !== null && (
-              <ConjugationTable
-                verb={currentQuestion.verb}
-                currentPronoun={currentQuestion.pronoun}
-                tense={currentQuestion.tense}
+                {currentQuestion.isCorrect !== null && (
+                  <ConjugationTable
+                    verb={currentQuestion.verb}
+                    currentPronoun={currentQuestion.pronoun}
+                    tense={currentQuestion.tense}
+                  />
+                )}
+              </>
+            ) : practiceMode === "fullTable" && fullTableVerb ? (
+              <FullTableCard
+                key={fullTableVerb.infinitive + selectedTense}
+                verb={fullTableVerb}
+                tense={selectedTense}
+                onComplete={handleFullTableComplete}
+                onSkip={generateFullTableVerb}
               />
-            )}
+            ) : null}
           </div>
         </main>
       </div>
